@@ -1,0 +1,114 @@
+{
+    "elements": [
+        {
+            "type": "ExpansionPanel",
+            "caption": "Namen",
+            "expanded": true,
+            "items": [
+                { "type": "ValidationTextBox", "name": "Name", "caption": "Kachelname (Raum)" },
+                { "type": "ValidationTextBox", "name": "LabelActual", "caption": "Bezeichnung Istwert" },
+                { "type": "ValidationTextBox", "name": "LabelTarget", "caption": "Bezeichnung Sollwert" },
+                { "type": "ValidationTextBox", "name": "LabelHeat", "caption": "Bezeichnung Heizung" },
+                { "type": "ValidationTextBox", "name": "LabelCool", "caption": "Bezeichnung Klima" },
+                { "type": "ValidationTextBox", "name": "LabelCO2", "caption": "Bezeichnung CO2" },
+                { "type": "ValidationTextBox", "name": "LabelVent", "caption": "Bezeichnung Lüftung" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Sommer-/Winterbetrieb (optional)",
+            "items": [
+                { "type": "SelectVariable", "name": "SeasonVar", "caption": "Variable (Bool): TRUE = Winter/Heizen, FALSE = Sommer/Kühlen" },
+                { "type": "CheckBox", "name": "SeasonInvert", "caption": "Invertieren (TRUE = Sommer)" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Temperatur",
+            "items": [
+                { "type": "SelectVariable", "name": "ActualVar", "caption": "Istwert (°C)" },
+                { "type": "SelectVariable", "name": "TargetVar", "caption": "Sollwert (°C, schreibbar)" },
+                { "type": "NumberSpinner", "name": "TempMin", "caption": "Anzeigebereich Minimum", "digits": 1, "suffix": "°C" },
+                { "type": "NumberSpinner", "name": "TempMax", "caption": "Anzeigebereich Maximum", "digits": 1, "suffix": "°C" },
+                { "type": "NumberSpinner", "name": "TempStep", "caption": "Schrittweite Schieber", "digits": 1, "suffix": "°C" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Heizung",
+            "items": [
+                { "type": "SelectVariable", "name": "HeatPowerVar", "caption": "Leistung (0-100 %)" },
+                { "type": "CheckBox", "name": "HeatInvert", "caption": "Leistung invertieren (100-0)" },
+                { "type": "SelectVariable", "name": "HeatReleaseVar", "caption": "Freigabe (Bool, schaltbar)" },
+                {
+                    "type": "Select", "name": "HeatReleasePos", "caption": "Position Freigabe-Button",
+                    "options": [
+                        { "caption": "rechts", "value": "right" },
+                        { "caption": "links", "value": "left" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Klimaanlage",
+            "items": [
+                { "type": "SelectVariable", "name": "CoolPowerVar", "caption": "Leistung (0-100 %)" },
+                { "type": "CheckBox", "name": "CoolInvert", "caption": "Leistung invertieren (100-0)" },
+                { "type": "SelectVariable", "name": "CoolReleaseVar", "caption": "Freigabe (Bool, schaltbar)" },
+                {
+                    "type": "Select", "name": "CoolReleasePos", "caption": "Position Freigabe-Button",
+                    "options": [
+                        { "caption": "rechts", "value": "right" },
+                        { "caption": "links", "value": "left" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Lüftung",
+            "items": [
+                { "type": "SelectVariable", "name": "CO2Var", "caption": "CO2 (ppm)" },
+                { "type": "NumberSpinner", "name": "CO2Min", "caption": "CO2 Anzeigebereich Minimum", "suffix": "ppm" },
+                { "type": "NumberSpinner", "name": "CO2Max", "caption": "CO2 Anzeigebereich Maximum", "suffix": "ppm" },
+                { "type": "SelectVariable", "name": "VentActiveVar", "caption": "Lüftungsanlage aktiv (Bool)" },
+                { "type": "SelectVariable", "name": "VentPowerVar", "caption": "Lüftungsleistung (0-100 %)" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Farben",
+            "items": [
+                { "type": "SelectColor", "name": "ColorCold", "caption": "Farbe kalt" },
+                { "type": "SelectColor", "name": "ColorWarm", "caption": "Farbe warm" },
+                { "type": "SelectColor", "name": "ColorVent", "caption": "Farbe Lüftung" },
+                { "type": "SelectColor", "name": "TextColor", "caption": "Textfarbe (transparent = Standard des Themes)" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Hintergrund",
+            "items": [
+                { "type": "SelectColor", "name": "BackgroundColor", "caption": "Kachelhintergrundfarbe (transparent = Standard)" },
+                { "type": "NumberSpinner", "name": "BackgroundOpacity", "caption": "Deckkraft Hintergrundfarbe", "minimum": 0, "maximum": 100, "suffix": "%" },
+                { "type": "SelectMedia", "name": "BackgroundImage", "caption": "Hintergrundbild (Medienobjekt)" },
+                {
+                    "type": "Select", "name": "ImagePosition", "caption": "Bildposition",
+                    "options": [
+                        { "caption": "Vollbild", "value": "full" },
+                        { "caption": "Oben links", "value": "top-left" },
+                        { "caption": "Oben rechts", "value": "top-right" },
+                        { "caption": "Unten links", "value": "bottom-left" },
+                        { "caption": "Unten rechts", "value": "bottom-right" },
+                        { "caption": "Mitte", "value": "center" }
+                    ]
+                },
+                { "type": "NumberSpinner", "name": "ImageSize", "caption": "Bildgröße (nicht bei Vollbild)", "minimum": 5, "maximum": 100, "suffix": "%" },
+                { "type": "NumberSpinner", "name": "ImageOpacity", "caption": "Deckkraft Bild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        }
+    ],
+    "actions": [],
+    "status": []
+}

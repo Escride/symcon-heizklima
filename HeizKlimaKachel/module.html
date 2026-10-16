@@ -1,0 +1,323 @@
+<style>
+    :root { --track: rgba(128,128,128,.28); --h: 36px; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+    body { font-family: var(--font-family, system-ui, -apple-system, "Segoe UI", sans-serif); }
+
+    #tile { position: relative; width: 100%; height: 100%; color: var(--content-color, inherit); }
+    #bgcolor, #bgimg { position: absolute; pointer-events: none; }
+    #bgcolor { top: 0; left: 0; right: 0; bottom: 0; }
+    #bgimg { background-repeat: no-repeat; display: none; }
+
+    #content { position: relative; z-index: 1; height: 100%; padding: 12px; display: flex;
+               flex-direction: column; justify-content: center; gap: 10px; overflow: auto; }
+
+    #head { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 1.15em; }
+    #season { font-size: .8em; font-weight: 500; opacity: .85; }
+
+    .row { display: flex; gap: 6px; align-items: stretch; }
+
+    .bar { position: relative; flex: 1; min-width: 0; height: var(--h); border-radius: 10px;
+           overflow: hidden; background: var(--track); }
+    .grad { position: absolute; top: 0; left: 0; right: 0; bottom: 0; clip-path: inset(0 100% 0 0);
+            transition: clip-path .4s ease; }
+    .txt { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
+           align-items: center; padding: 0 12px; font-size: .9em; color: #fff;
+           text-shadow: 0 1px 3px rgba(0,0,0,.55); pointer-events: none; }
+    .txt span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* Ist + Soll fließen ineinander */
+    #block { display: flex; flex-direction: column; }
+    #block .bar.top { border-radius: 10px 10px 0 0; }
+    #block .bar.bottom { border-radius: 0 0 10px 10px; touch-action: pan-y; cursor: ew-resize; }
+    #block.single .bar { border-radius: 10px; }
+    #tgtGrad { opacity: .6; }
+    #thumb { position: absolute; top: 4px; bottom: 4px; width: 6px; border-radius: 3px; background: #fff;
+             box-shadow: 0 0 6px rgba(0,0,0,.5); left: 0; pointer-events: none; }
+
+    .btn { width: var(--h); height: var(--h); border-radius: 10px; border: none; background: var(--track);
+           color: inherit; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none; padding: 0; }
+    .btn.on { color: #fff; }
+    .ind { width: var(--h); height: var(--h); border-radius: 10px; background: var(--track); display: flex;
+           align-items: center; justify-content: center; flex: none; }
+    .ind.on { color: #fff; }
+    .ind.spin svg { animation: spin 1.3s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<div id="tile">
+    <div id="bgcolor"></div>
+    <div id="bgimg"></div>
+
+    <div id="content">
+        <div id="head"><span id="name"></span><span id="season"></span></div>
+
+        <!-- Ist- und Sollwert -->
+        <div id="block">
+            <div class="bar top" id="actBar">
+                <div class="grad" id="actGrad"></div>
+                <div class="txt"><span id="actLbl"></span><span id="actVal"></span></div>
+            </div>
+            <div class="bar bottom" id="tgtBar">
+                <div class="grad" id="tgtGrad"></div>
+                <div id="thumb"></div>
+                <div class="txt"><span id="tgtLbl"></span><span id="tgtVal"></span></div>
+            </div>
+        </div>
+
+        <!-- Heizung -->
+        <div class="row" id="heatRow">
+            <button class="btn" id="heatBtn" title="Freigabe">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>
+            </button>
+            <div class="bar">
+                <div class="grad" id="heatGrad"></div>
+                <div class="txt"><span id="heatLbl"></span><span id="heatVal"></span></div>
+            </div>
+        </div>
+
+        <!-- Klima -->
+        <div class="row" id="coolRow">
+            <button class="btn" id="coolBtn" title="Freigabe">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>
+            </button>
+            <div class="bar">
+                <div class="grad" id="coolGrad"></div>
+                <div class="txt"><span id="coolLbl"></span><span id="coolVal"></span></div>
+            </div>
+        </div>
+
+        <!-- CO2 -->
+        <div class="row" id="co2Row">
+            <div class="bar">
+                <div class="grad" id="co2Grad"></div>
+                <div class="txt"><span id="co2Lbl"></span><span id="co2Val"></span></div>
+            </div>
+        </div>
+
+        <!-- Lüftung -->
+        <div class="row" id="ventRow">
+            <div class="ind" id="ventInd">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                    <circle cx="12" cy="12" r="2"/>
+                    <path d="M12 10C12 4 15 2 17 3.5 18.5 5 16 9 12 10Z"/>
+                    <path d="M12 10C12 4 15 2 17 3.5 18.5 5 16 9 12 10Z" transform="rotate(120 12 12)"/>
+                    <path d="M12 10C12 4 15 2 17 3.5 18.5 5 16 9 12 10Z" transform="rotate(240 12 12)"/>
+                </svg>
+            </div>
+            <div class="bar">
+                <div class="grad" id="ventGrad"></div>
+                <div class="txt"><span id="ventLbl"></span><span id="ventVal"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    let cfg = null, vals = {}, dragging = false, dragVal = null;
+
+    const $ = id => document.getElementById(id);
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const isNum = v => typeof v === 'number' && isFinite(v);
+    const fmt = (v, d) => v.toLocaleString('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d });
+    const pct = (v, min, max) => max > min ? clamp((v - min) / (max - min) * 100, 0, 100) : 0;
+    const show = (el, on, display) => { el.style.display = on ? (display || '') : 'none'; };
+    const clip = (el, p) => { el.style.clipPath = 'inset(0 ' + (100 - clamp(p, 0, 100)) + '% 0 0)'; };
+
+    function rgba(hex, a) {
+        const n = parseInt(hex.slice(1), 16);
+        return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    }
+
+    window.handleMessage = function (msg) {
+        const d = (typeof msg === 'string') ? JSON.parse(msg) : msg;
+        if (d.config) cfg = d.config;
+        if (d.values) vals = d.values;
+        render();
+    };
+
+    function applyBackground() {
+        $('bgcolor').style.background = cfg.bgColor ? rgba(cfg.bgColor, cfg.bgOpacity / 100) : 'transparent';
+        $('tile').style.color = cfg.textColor || '';
+
+        const el = $('bgimg'), im = cfg.image;
+        if (!im || !im.src) { el.style.display = 'none'; return; }
+
+        el.style.display = 'block';
+        el.style.backgroundImage = 'url("' + im.src + '")';
+        el.style.opacity = im.opacity / 100;
+        el.style.top = el.style.bottom = el.style.left = el.style.right = 'auto';
+        el.style.width = el.style.height = '';
+
+        if (im.pos === 'full') {
+            el.style.top = el.style.left = el.style.right = el.style.bottom = '0';
+            el.style.backgroundSize = 'cover';
+            el.style.backgroundPosition = 'center';
+            return;
+        }
+        el.style.width = el.style.height = im.size + '%';
+        el.style.backgroundSize = 'contain';
+        switch (im.pos) {
+            case 'top-left':     el.style.top = '0';    el.style.left = '0';  el.style.backgroundPosition = 'left top'; break;
+            case 'top-right':    el.style.top = '0';    el.style.right = '0'; el.style.backgroundPosition = 'right top'; break;
+            case 'bottom-left':  el.style.bottom = '0'; el.style.left = '0';  el.style.backgroundPosition = 'left bottom'; break;
+            case 'bottom-right': el.style.bottom = '0'; el.style.right = '0'; el.style.backgroundPosition = 'right bottom'; break;
+            default:
+                el.style.top = '50%'; el.style.left = '50%';
+                el.style.transform = 'translate(-50%,-50%)';
+                el.style.backgroundPosition = 'center';
+        }
+        if (im.pos !== 'center') el.style.transform = '';
+    }
+
+    function renderTarget() {
+        const v = dragging ? dragVal : vals.target;
+        const p = isNum(v) ? pct(v, cfg.min, cfg.max) : 0;
+        clip($('tgtGrad'), p);
+        $('thumb').style.left = 'calc(' + p + '% - ' + (p * 0.06) + 'px)';
+        $('tgtVal').textContent = isNum(v) ? fmt(v, 1) + ' °C' : '–';
+    }
+
+    function powerRow(prefix, visible, power, invert, color, label, relKey, relPos) {
+        const row = $(prefix + 'Row');
+        show(row, visible, 'flex');
+        if (!visible) return;
+
+        $(prefix + 'Lbl').textContent = label;
+        let p = null;
+        if (isNum(power)) { p = clamp(power, 0, 100); if (invert) p = 100 - p; }
+
+        $(prefix + 'Grad').style.background = 'linear-gradient(90deg,' + rgba(color, .35) + ',' + color + ')';
+        clip($(prefix + 'Grad'), p === null ? 0 : p);
+        $(prefix + 'Val').textContent = p === null ? '–' : fmt(p, 0) + ' %';
+
+        const btn = $(prefix + 'Btn');
+        const hasRel = cfg.has[relKey];
+        show(btn, hasRel, 'flex');
+        btn.style.order = relPos === 'left' ? -1 : 1;
+        const on = !!vals[relKey];
+        btn.classList.toggle('on', on);
+        btn.style.background = on ? color : '';
+    }
+
+    function render() {
+        if (!cfg) return;
+        const has = cfg.has;
+        applyBackground();
+
+        // Kopf
+        $('name').textContent = cfg.name;
+
+        // Sommer/Winter
+        let mode = 'both';
+        if (has.season && vals.season !== null && vals.season !== undefined) {
+            let winter = !!vals.season;
+            if (cfg.seasonInvert) winter = !winter;
+            mode = winter ? 'heat' : 'cool';
+        }
+        $('season').textContent = mode === 'heat' ? '❄ Winter' : (mode === 'cool' ? '☀ Sommer' : '');
+
+        // Ist / Soll
+        const grad = 'linear-gradient(90deg,' + cfg.colorCold + ',' + cfg.colorWarm + ')';
+        $('actGrad').style.background = grad;
+        $('tgtGrad').style.background = grad;
+
+        show($('actBar'), has.actual);
+        show($('tgtBar'), has.target);
+        show($('block'), has.actual || has.target, 'flex');
+        $('block').classList.toggle('single', !(has.actual && has.target));
+
+        $('actLbl').textContent = cfg.labels.actual;
+        $('tgtLbl').textContent = cfg.labels.target;
+        if (has.actual) {
+            const v = vals.actual;
+            clip($('actGrad'), isNum(v) ? pct(v, cfg.min, cfg.max) : 0);
+            $('actVal').textContent = isNum(v) ? fmt(v, 1) + ' °C' : '–';
+        }
+        if (has.target) renderTarget();
+
+        // Heizung / Klima
+        powerRow('heat', has.heatPower && mode !== 'cool', vals.heatPower, cfg.heatInvert,
+                 cfg.colorWarm, cfg.labels.heat, 'heatRelease', cfg.heatRelPos);
+        powerRow('cool', has.coolPower && mode !== 'heat', vals.coolPower, cfg.coolInvert,
+                 cfg.colorCold, cfg.labels.cool, 'coolRelease', cfg.coolRelPos);
+
+        // CO2
+        show($('co2Row'), has.co2, 'flex');
+        if (has.co2) {
+            $('co2Lbl').textContent = cfg.labels.co2;
+            $('co2Grad').style.background = 'linear-gradient(90deg,#22C55E,#EAB308,#EF4444)';
+            const v = vals.co2;
+            clip($('co2Grad'), isNum(v) ? pct(v, cfg.co2Min, cfg.co2Max) : 0);
+            $('co2Val').textContent = isNum(v) ? fmt(v, 0) + ' ppm' : '–';
+        }
+
+        // Lüftung
+        const ventShow = has.ventActive || has.ventPower;
+        show($('ventRow'), ventShow, 'flex');
+        if (ventShow) {
+            $('ventLbl').textContent = cfg.labels.vent;
+            $('ventGrad').style.background = 'linear-gradient(90deg,' + rgba(cfg.colorVent, .35) + ',' + cfg.colorVent + ')';
+            const active = has.ventActive ? !!vals.ventActive : (has.ventPower && isNum(vals.ventPower) && vals.ventPower > 0);
+            const ind = $('ventInd');
+            show(ind, has.ventActive, 'flex');
+            ind.classList.toggle('on', active);
+            ind.classList.toggle('spin', active);
+            ind.style.background = active ? cfg.colorVent : '';
+
+            if (has.ventPower && isNum(vals.ventPower)) {
+                const p = clamp(vals.ventPower, 0, 100);
+                clip($('ventGrad'), p);
+                $('ventVal').textContent = fmt(p, 0) + ' %';
+            } else {
+                clip($('ventGrad'), active ? 100 : 0);
+                $('ventVal').textContent = active ? 'An' : 'Aus';
+            }
+        }
+    }
+
+    // ---- Schieber Sollwert ----
+    const tgtBar = $('tgtBar');
+    function valFromEvent(e) {
+        const r = tgtBar.getBoundingClientRect();
+        const f = clamp((e.clientX - r.left) / r.width, 0, 1);
+        const step = cfg.step > 0 ? cfg.step : 0.5;
+        let v = cfg.min + f * (cfg.max - cfg.min);
+        v = Math.round(v / step) * step;
+        return clamp(v, cfg.min, cfg.max);
+    }
+    tgtBar.addEventListener('pointerdown', function (e) {
+        if (!cfg || !cfg.has.target) return;
+        dragging = true;
+        tgtBar.setPointerCapture(e.pointerId);
+        dragVal = valFromEvent(e);
+        renderTarget();
+    });
+    tgtBar.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        dragVal = valFromEvent(e);
+        renderTarget();
+    });
+    tgtBar.addEventListener('pointerup', function () {
+        if (!dragging) return;
+        dragging = false;
+        vals.target = dragVal;
+        if (typeof requestAction === 'function') requestAction('target', dragVal);
+        renderTarget();
+    });
+    tgtBar.addEventListener('pointercancel', function () {
+        dragging = false;
+        dragVal = null;
+        renderTarget();
+    });
+
+    // ---- Freigabe-Buttons ----
+    $('heatBtn').addEventListener('click', function () {
+        if (typeof requestAction === 'function') requestAction('heatRelease', !vals.heatRelease);
+    });
+    $('coolBtn').addEventListener('click', function () {
+        if (typeof requestAction === 'function') requestAction('coolRelease', !vals.coolRelease);
+    });
+})();
+</script>
