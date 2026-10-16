@@ -117,7 +117,6 @@ class HeizungKlimaKachel extends IPSModule
 
     public function GetVisualizationTile()
     {
-        $this->SetVisualizationTitle("");
         $html = file_get_contents(__DIR__ . '/module.html');
         $init = '<script>handleMessage(' . json_encode($this->GetFullMessage(), JSON_HEX_TAG) . ');</script>';
         return $html . $init;
