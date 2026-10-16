@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class HeizKlimaKachel extends IPSModule
+class HeizungKlimaKachel extends IPSModule
 {
     // Schlüssel in der Kachel => Name der Eigenschaft (Variable)
     private const VARS = [
