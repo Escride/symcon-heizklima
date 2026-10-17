@@ -30,10 +30,12 @@
                         pointer-events: none; }
     .readout-value { font-weight: 600; font-variant-numeric: tabular-nums; }
     .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
-    .styled-text::before { content: ""; position: absolute; z-index: -2; inset: -2px -5px;
+    .styled-text::before { content: ""; position: absolute; z-index: -2;
+                           inset: var(--text-inset-y, -2px) var(--text-inset-x, -5px);
                            border: var(--text-border-width, 0px) solid var(--text-border-color, transparent);
                            border-radius: inherit; background-color: var(--text-background, transparent); pointer-events: none; }
-    .styled-text::after { content: ""; position: absolute; z-index: -1; inset: -2px -5px;
+    .styled-text::after { content: ""; position: absolute; z-index: -1;
+                          inset: var(--text-inset-y, -2px) var(--text-inset-x, -5px);
                           border-radius: inherit; background-image: var(--text-image, none);
                           background-size: cover; background-position: center;
                           opacity: var(--text-image-opacity, 1); pointer-events: none; }
@@ -57,6 +59,8 @@
     let cfg = null;
     let vals = {};
     let activeDrag = null;
+    let resizeObserver = null;
+    let tileScale = 1;
     const elementsByKey = {};
     const $ = id => document.getElementById(id);
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -66,6 +70,14 @@
         maximumFractionDigits: digits
     });
     const showValue = value => isNum(value) ? fmt(value, Number.isInteger(value) ? 0 : 1) : '–';
+
+    function updateTileScale() {
+        const tile = $('tile');
+        const width = tile.clientWidth;
+        const height = tile.clientHeight;
+        if (width <= 0 || height <= 0) return;
+        tileScale = clamp(Math.min(width / 360, height / 220), .82, 1.08);
+    }
 
     function mixColors(first, second) {
         const a = parseInt(first.slice(1), 16);
@@ -80,10 +92,15 @@
         node.classList.add('styled-text');
         node.style.color = style.color || '#000';
         node.style.fontFamily = style.fontFamily || '';
-        node.style.fontSize = clamp(isNum(style.fontSize) ? style.fontSize : .875, .5, 3) + 'rem';
+        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        node.style.fontSize = Math.max(12, clamp(
+            isNum(style.fontSize) ? style.fontSize : .875, .5, 3) * rem * tileScale) + 'px';
         node.style.setProperty('--text-background', style.backgroundColor || 'transparent');
-        node.style.setProperty('--text-border-width', clamp(style.borderWidth || 0, 0, 12) + 'px');
+        node.style.setProperty('--text-border-width',
+            clamp(style.borderWidth || 0, 0, 12) * tileScale + 'px');
         node.style.setProperty('--text-border-color', style.borderColor || 'transparent');
+        node.style.setProperty('--text-inset-y', -2 * tileScale + 'px');
+        node.style.setProperty('--text-inset-x', -5 * tileScale + 'px');
         const image = style.image || {};
         node.style.setProperty('--text-image', image.src ? 'url("' + image.src + '")' : 'none');
         node.style.setProperty('--text-image-opacity', String(clamp(
@@ -92,22 +109,24 @@
 
     function setNamePosition() {
         const name = $('name');
-        const x = isNum(cfg.nameOffsetX) ? cfg.nameOffsetX : 0;
-        const y = isNum(cfg.nameOffsetY) ? cfg.nameOffsetY : 0;
+        const x = (isNum(cfg.nameOffsetX) ? cfg.nameOffsetX : 0) * tileScale;
+        const y = (isNum(cfg.nameOffsetY) ? cfg.nameOffsetY : 0) * tileScale;
+        const inset = 12 * tileScale;
+        name.style.maxWidth = 'calc(100% - ' + 2 * inset + 'px)';
         name.style.top = name.style.right = name.style.bottom = name.style.left = '';
         name.style.transform = '';
         switch (cfg.namePosition) {
             case 'top-right':
-                name.style.top = 'calc(12px + ' + y + 'px)';
-                name.style.right = 'calc(12px - ' + x + 'px)';
+                name.style.top = 'calc(' + inset + 'px + ' + y + 'px)';
+                name.style.right = 'calc(' + inset + 'px - ' + x + 'px)';
                 break;
             case 'bottom-left':
-                name.style.bottom = 'calc(12px - ' + y + 'px)';
-                name.style.left = 'calc(12px + ' + x + 'px)';
+                name.style.bottom = 'calc(' + inset + 'px - ' + y + 'px)';
+                name.style.left = 'calc(' + inset + 'px + ' + x + 'px)';
                 break;
             case 'bottom-right':
-                name.style.bottom = 'calc(12px - ' + y + 'px)';
-                name.style.right = 'calc(12px - ' + x + 'px)';
+                name.style.bottom = 'calc(' + inset + 'px - ' + y + 'px)';
+                name.style.right = 'calc(' + inset + 'px - ' + x + 'px)';
                 break;
             case 'center':
                 name.style.top = 'calc(50% + ' + y + 'px)';
@@ -115,8 +134,8 @@
                 name.style.transform = 'translate(-50%, -50%)';
                 break;
             default:
-                name.style.top = 'calc(12px + ' + y + 'px)';
-                name.style.left = 'calc(12px + ' + x + 'px)';
+                name.style.top = 'calc(' + inset + 'px + ' + y + 'px)';
+                name.style.left = 'calc(' + inset + 'px + ' + x + 'px)';
         }
     }
 
@@ -256,19 +275,24 @@
         readout.style.display = textOnly || externalText ? 'inline-flex' : 'none';
         bar.querySelector('.bar-text').style.display = externalText ? 'none' : '';
         const width = clamp(element.width || 78, 10, 100);
+        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const targetHitSize = element.target ? 44 : 0;
         if (textOnly) {
             root.style.width = 'auto';
             root.style.height = 'auto';
         } else {
             const tileWidth = $('tile').clientWidth;
             const tileHeight = $('tile').clientHeight;
-            const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
             const barWidth = arc
-                ? tileWidth * width / 100
-                : vertical ? 2.5 * rem : tileWidth * width / 100;
+                ? Math.min(tileWidth, tileHeight, Math.max(targetHitSize, tileWidth * width / 100))
+                : vertical
+                    ? Math.min(tileWidth, Math.max(targetHitSize, 2.5 * rem * tileScale))
+                    : Math.min(tileWidth, Math.max(targetHitSize, tileWidth * width / 100));
             const barHeight = arc
                 ? barWidth
-                : vertical ? tileHeight * width / 100 : 2.25 * rem;
+                : vertical
+                    ? Math.min(tileHeight, Math.max(targetHitSize, tileHeight * width / 100))
+                    : Math.min(tileHeight, Math.max(targetHitSize, 2.25 * rem * tileScale));
             const radians = (arc ? 0 : angle) * Math.PI / 180;
             const boundsWidth = Math.abs(Math.cos(radians)) * barWidth +
                 Math.abs(Math.sin(radians)) * barHeight;
@@ -279,8 +303,16 @@
             bar.style.width = barWidth + 'px';
             bar.style.height = barHeight + 'px';
         }
-        bar.style.border = clamp(element.borderWidth || 0, 0, 12) + 'px solid ' +
+        bar.style.borderRadius = 10 * tileScale + 'px';
+        bar.style.border = clamp(element.borderWidth || 0, 0, 12) * tileScale + 'px solid ' +
             (element.borderColor || 'transparent');
+        const text = bar.querySelector('.bar-text');
+        text.style.fontSize = Math.max(12, 14 * tileScale) + 'px';
+        text.style.gap = 8 * tileScale + 'px';
+        text.style.padding = vertical
+            ? (8 * tileScale) + 'px ' + (2.4 * tileScale) + 'px'
+            : '0 ' + (12 * tileScale) + 'px';
+        if (arc) text.style.padding = 4 * tileScale + 'px';
         const low = element.lowColor || '#3B82F6';
         const high = element.highColor || '#F97316';
         const mid = element.rangeMax > element.rangeMin
@@ -304,6 +336,8 @@
         const path = arcPath(start, sweep);
         const track = bar.querySelector('.arc-track');
         const arcFill = bar.querySelector('.arc-progress');
+        track.style.strokeWidth = Math.max(6, 8 * tileScale) + 'px';
+        arcFill.style.strokeWidth = Math.max(6, 8 * tileScale) + 'px';
         const gradientStops = bar.querySelectorAll('linearGradient stop');
         gradientStops[0].setAttribute('offset', '0%');
         gradientStops[0].setAttribute('stop-color', low);
@@ -317,14 +351,23 @@
         arcFill.style.strokeDasharray = '100 100';
         arcFill.style.strokeDashoffset = String(100 - percent);
         const thumb = $('thumb-' + key);
+        const thumbSize = Math.max(4, 5 * tileScale);
         if (arc || !element.target) {
             thumb.style.display = 'none';
         } else if (vertical) {
             thumb.style.display = '';
-            thumb.style.bottom = 'calc(' + percent + '% - ' + (percent * .06) + 'px)';
+            thumb.style.width = 'auto';
+            thumb.style.height = thumbSize + 'px';
+            thumb.style.left = thumb.style.right = 4 * tileScale + 'px';
+            thumb.style.top = 'auto';
+            thumb.style.bottom = 'calc(' + percent + '% - ' + thumbSize / 2 + 'px)';
         } else {
             thumb.style.display = '';
-            thumb.style.left = 'calc(' + percent + '% - ' + (percent * .06) + 'px)';
+            thumb.style.width = thumbSize + 'px';
+            thumb.style.height = '';
+            thumb.style.top = thumb.style.bottom = 4 * tileScale + 'px';
+            thumb.style.right = '';
+            thumb.style.left = 'calc(' + percent + '% - ' + thumbSize / 2 + 'px)';
         }
         const labelText = showLabel ? element.label : '';
         const valueText = showValue(value);
@@ -332,9 +375,8 @@
         $('bar-value-' + key).textContent = valueText;
         $('readout-label-' + key).textContent = labelText;
         $('readout-value-' + key).textContent = valueText;
-        const text = bar.querySelector('.bar-text');
-        const offsetX = isNum(element.textOffsetX) ? element.textOffsetX : 0;
-        const offsetY = isNum(element.textOffsetY) ? element.textOffsetY : 0;
+        const offsetX = (isNum(element.textOffsetX) ? element.textOffsetX : 0) * tileScale;
+        const offsetY = (isNum(element.textOffsetY) ? element.textOffsetY : 0) * tileScale;
         if (arc) {
             const middleAngle = (start + sweep / 2) * Math.PI / 180;
             const textX = 50 + 20 * Math.sin(middleAngle);
@@ -361,21 +403,21 @@
                 const sign = textPosition === 'above' ? -1 : 1;
                 if (vertical) {
                     direction = axis;
-                    distance = barHeight / 2 + 6;
+                    distance = barHeight / 2 + 6 * tileScale;
                 } else {
                     direction = normal;
-                    distance = barHeight / 2 + 6;
+                    distance = barHeight / 2 + 6 * tileScale;
                 }
                 direction = [direction[0] * sign, direction[1] * sign];
             } else {
                 if (vertical) {
                     direction = normal;
-                    distance = barWidth / 2 + 6;
+                    distance = barWidth / 2 + 6 * tileScale;
                     const sign = textPosition === 'left' ? 1 : -1;
                     direction = [direction[0] * sign, direction[1] * sign];
                 } else {
                     direction = axis;
-                    distance = barWidth / 2 + 6;
+                    distance = barWidth / 2 + 6 * tileScale;
                     const sign = textPosition === 'left' ? -1 : 1;
                     direction = [direction[0] * sign, direction[1] * sign];
                 }
@@ -487,6 +529,7 @@
 
     function render() {
         if (!cfg || !cfg.elements) return;
+        updateTileScale();
         $('name').textContent = cfg.name || '';
         applyTextStyle($('name'), cfg.textStyles.name);
         setNamePosition();
@@ -499,7 +542,12 @@
         });
     }
 
-    window.addEventListener('resize', render);
+    if (typeof ResizeObserver === 'function') {
+        resizeObserver = new ResizeObserver(render);
+        resizeObserver.observe($('tile'));
+    } else {
+        window.addEventListener('resize', render);
+    }
 
     window.handleMessage = function (message) {
         const data = typeof message === 'string' ? JSON.parse(message) : message;

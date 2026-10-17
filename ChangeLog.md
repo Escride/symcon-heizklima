@@ -2,6 +2,8 @@
 
 ## 2026-10-17
 
+- Recalculated the tile layout when its container is resized, including when the viewport itself does not change.
+- Added gentle container-based scaling for text, spacing, borders, and bar details while preserving the configured layout and touch-sized target controls.
 - Fixed layout presets to size position arrays from the configured display elements.
 - Restored straight-bar defaults for target and output displays; kept other read-only values text-only by default.
 - Rendered legacy straight display settings as bars after tile reload.
