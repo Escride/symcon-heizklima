@@ -11,7 +11,7 @@
     .bar { position: relative; width: 100%; height: 2.25rem; border-radius: .65rem; overflow: hidden;
            background: rgba(128,128,128,.28); }
     .bar.vertical { width: 2.5rem; height: 9rem; margin: auto; }
-    .bar.arc { height: 6.5rem; overflow: visible; background: transparent; }
+    .bar.arc { height: auto; aspect-ratio: 1; overflow: visible; background: transparent; }
     .fill { position: absolute; inset: 0; transform-origin: left center; clip-path: inset(0 100% 0 0); }
     .bar.vertical .fill { clip-path: inset(100% 0 0 0); }
     .arc-meter { display: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -253,7 +253,7 @@
         } else {
             root.style.width = width + '%';
             root.style.height = '';
-            bar.style.height = arc ? '6.5rem' : '2.25rem';
+            bar.style.height = arc ? 'auto' : '2.25rem';
         }
         bar.style.border = clamp(element.borderWidth || 0, 0, 12) + 'px solid ' +
             (element.borderColor || 'transparent');
@@ -273,7 +273,7 @@
             ? 'inset(' + (100 - percent) + '% 0 0 0)'
             : 'inset(0 ' + (100 - percent) + '% 0 0)';
         const start = clamp(element.start || 0, 0, 359);
-        const sweep = clamp(element.sweep || 180, 1, 359);
+        const sweep = clamp(isNum(element.sweep) ? element.sweep : 180, -359, 359);
         const path = arcPath(start, sweep);
         const track = bar.querySelector('.arc-track');
         const arcFill = bar.querySelector('.arc-progress');
@@ -356,7 +356,13 @@
                 const dy = event.clientY - (rect.top + rect.height / 2);
                 const angle = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
                 const start = ((element.start % 360) + 360) % 360;
-                fraction = clamp(((angle - start + 360) % 360) / Math.max(1, element.sweep), 0, 1);
+                const sweep = isNum(element.sweep) ? element.sweep : 180;
+                const distance = sweep < 0
+                    ? (start - angle + 360) % 360
+                    : (angle - start + 360) % 360;
+                fraction = Math.abs(sweep) > 0
+                    ? clamp(distance / Math.abs(sweep), 0, 1)
+                    : 0;
             } else if (element.orientation === 'vertical') {
                 fraction = clamp((rect.bottom - event.clientY) / rect.height, 0, 1);
             } else {

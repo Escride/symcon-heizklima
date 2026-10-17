@@ -93,6 +93,10 @@
                          "caption":  "Raumtemperatur",
                          "items":  [
                                        {
+                                           "type":  "Label",
+                                           "label":  "SAISON – Variable"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "SeasonVar",
                                            "caption":  "Saison (BOOL, optional)",
@@ -204,6 +208,10 @@
                                                              "minimum":  0
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ISTWERT – Variable und Messbereich"
                                        },
                                        {
                                            "type":  "SelectVariable",
@@ -332,7 +340,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayActualWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -341,7 +349,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -360,7 +368,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -445,6 +453,10 @@
                                                              "minimum":  0
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "SOLLWERT – Regler"
                                        },
                                        {
                                            "type":  "SelectVariable",
@@ -537,7 +549,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayTargetWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -546,7 +558,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -565,7 +577,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -650,6 +662,10 @@
                                                              "minimum":  0
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "VENTILSTELLUNG – Variable und Messbereich"
                                        },
                                        {
                                            "type":  "SelectVariable",
@@ -778,7 +794,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayValveActualWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -787,7 +803,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -806,7 +822,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -891,14 +907,6 @@
                                                              "minimum":  0
                                                          }
                                                      ]
-                                       },
-                                       {
-                                           "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
-                                       },
-                                       {
-                                           "type":  "Label",
-                                           "label":  "Textgestaltung"
                                        }
                                    ]
                      },
@@ -1042,7 +1050,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentActualWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1051,7 +1059,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1070,7 +1078,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -1247,7 +1255,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentTargetWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1256,7 +1264,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1275,7 +1283,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -1488,7 +1496,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayCO2Width",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1497,7 +1505,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1516,7 +1524,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -1735,7 +1743,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateActualWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1744,7 +1752,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1763,7 +1771,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -1940,7 +1948,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateTargetWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1949,7 +1957,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1968,7 +1976,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -2181,7 +2189,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanActualWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -2190,7 +2198,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2209,7 +2217,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
@@ -2386,7 +2394,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanTargetWidth",
-                                                             "caption":  "Länge / Breite",
+                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -2395,7 +2403,7 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Startwinkel/Bogenweite nur bei gebogener Form. 0° = Norden, im Uhrzeigersinn."
+                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2414,7 +2422,7 @@
                                                              "caption":  "Bogenweite",
                                                              "maximum":  359,
                                                              "suffix":  "°",
-                                                             "minimum":  1
+                                                             "minimum":  -359
                                                          }
                                                      ]
                                        },
