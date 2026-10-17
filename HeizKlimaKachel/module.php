@@ -143,6 +143,9 @@ class HeizungKlimaKachel extends IPSModule
             case 'coolRelease':
                 $this->WriteTo('CoolReleaseVar', (bool) $Value);
                 break;
+            case 'ResetAppearance':
+                $this->ResetAppearance();
+                break;
         }
     }
 
@@ -160,6 +163,46 @@ class HeizungKlimaKachel extends IPSModule
         $id = $this->ReadPropertyInteger($property);
         if ($id > 0 && IPS_VariableExists($id)) {
             RequestAction($id, $value);
+        }
+    }
+
+    private function ResetAppearance(): void
+    {
+        $defaults = [
+            'NamePosition'     => 'top-left',
+            'NameOffsetX'      => 0,
+            'NameOffsetY'      => 0,
+            'ColorCold'        => hexdec('3B82F6'),
+            'ColorWarm'        => hexdec('F97316'),
+            'ColorVent'        => hexdec('14B8A6'),
+            'TextColor'        => -1,
+            'BackgroundColor'  => -1,
+            'BackgroundOpacity' => 100,
+            'BackgroundImage'  => 0,
+            'ImagePosition'    => 'full',
+            'ImageSize'        => 50,
+            'ImageOpacity'     => 40
+        ];
+
+        foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
+            $defaults['Text' . $property . 'Color'] = 0;
+            $defaults['Text' . $property . 'Font'] = '';
+            $defaults['Text' . $property . 'Size'] = $fontSize;
+            $defaults['Text' . $property . 'BackgroundColor'] = -1;
+            $defaults['Text' . $property . 'BorderWidth'] = 0;
+            $defaults['Text' . $property . 'BorderColor'] = -1;
+            $defaults['Text' . $property . 'Image'] = 0;
+            $defaults['Text' . $property . 'ImageOpacity'] = 100;
+        }
+
+        foreach ($defaults as $property => $value) {
+            if (!IPS_SetProperty($this->InstanceID, $property, (string) $value)) {
+                throw new RuntimeException('Could not reset appearance property: ' . $property);
+            }
+        }
+
+        if (!IPS_ApplyChanges($this->InstanceID)) {
+            throw new RuntimeException('Could not apply appearance defaults.');
         }
     }
 
