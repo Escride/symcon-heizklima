@@ -2,16 +2,218 @@
     "elements": [
         {
             "type": "ExpansionPanel",
-            "caption": "Namen",
+            "caption": "Kachelname",
             "expanded": true,
             "items": [
                 { "type": "ValidationTextBox", "name": "Name", "caption": "Kachelname (Raum)" },
-                { "type": "ValidationTextBox", "name": "LabelActual", "caption": "Bezeichnung Istwert" },
-                { "type": "ValidationTextBox", "name": "LabelTarget", "caption": "Bezeichnung Sollwert" },
-                { "type": "ValidationTextBox", "name": "LabelHeat", "caption": "Bezeichnung Heizung" },
-                { "type": "ValidationTextBox", "name": "LabelCool", "caption": "Bezeichnung Klima" },
-                { "type": "ValidationTextBox", "name": "LabelCO2", "caption": "Bezeichnung CO2" },
-                { "type": "ValidationTextBox", "name": "LabelVent", "caption": "Bezeichnung Lüftung" }
+                { "type": "ValidationTextBox", "name": "TextNameFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextNameSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextNameColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextNameBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextNameBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextNameBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextNameImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextNameImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" },
+                {
+                    "type": "Select",
+                    "name": "NamePosition",
+                    "caption": "Position Kachelname",
+                    "options": [
+                        { "caption": "Oben links", "value": "top-left" },
+                        { "caption": "Oben rechts", "value": "top-right" },
+                        { "caption": "Unten links", "value": "bottom-left" },
+                        { "caption": "Unten rechts", "value": "bottom-right" },
+                        { "caption": "Mitte", "value": "center" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Saisonanzeige – Textgestaltung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextSeasonFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextSeasonSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextSeasonColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextSeasonBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextSeasonBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextSeasonBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextSeasonImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextSeasonImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Istwert-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelActual", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextActualLabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextActualLabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextActualLabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextActualLabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextActualLabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextActualLabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextActualLabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextActualLabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Istwert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextActualValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextActualValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextActualValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextActualValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextActualValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextActualValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextActualValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextActualValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Sollwert-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelTarget", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextTargetLabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextTargetLabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextTargetLabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextTargetLabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextTargetLabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextTargetLabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextTargetLabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextTargetLabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Sollwert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextTargetValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextTargetValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextTargetValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextTargetValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextTargetValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextTargetValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextTargetValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextTargetValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Heizung-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelHeat", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextHeatLabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextHeatLabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextHeatLabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextHeatLabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextHeatLabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextHeatLabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextHeatLabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextHeatLabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Heizung-Wert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextHeatValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextHeatValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextHeatValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextHeatValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextHeatValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextHeatValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextHeatValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextHeatValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Klima-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelCool", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextCoolLabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextCoolLabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCoolLabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextCoolLabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextCoolLabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCoolLabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextCoolLabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextCoolLabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Klima-Wert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextCoolValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextCoolValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCoolValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextCoolValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextCoolValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCoolValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextCoolValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextCoolValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "CO₂-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelCO2", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextCO2LabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextCO2LabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCO2LabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextCO2LabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextCO2LabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCO2LabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextCO2LabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextCO2LabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "CO₂-Wert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextCO2ValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextCO2ValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCO2ValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextCO2ValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextCO2ValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextCO2ValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextCO2ValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextCO2ValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Lüftung-Beschriftung",
+            "items": [
+                { "type": "ValidationTextBox", "name": "LabelVent", "caption": "Text" },
+                { "type": "ValidationTextBox", "name": "TextVentLabelFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextVentLabelSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextVentLabelColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextVentLabelBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextVentLabelBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextVentLabelBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextVentLabelImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextVentLabelImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Lüftung-Wert",
+            "items": [
+                { "type": "ValidationTextBox", "name": "TextVentValueFont", "caption": "Schriftart (leer = Theme)" },
+                { "type": "NumberSpinner", "name": "TextVentValueSize", "caption": "Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextVentValueColor", "caption": "Textfarbe" },
+                { "type": "SelectColor", "name": "TextVentValueBackgroundColor", "caption": "Texthintergrund" },
+                { "type": "NumberSpinner", "name": "TextVentValueBorderWidth", "caption": "Rahmenbreite (0 = aus)", "minimum": 0, "maximum": 12, "suffix": "px" },
+                { "type": "SelectColor", "name": "TextVentValueBorderColor", "caption": "Rahmenfarbe" },
+                { "type": "SelectMedia", "name": "TextVentValueImage", "caption": "Hintergrundbild hinter dem Text" },
+                { "type": "NumberSpinner", "name": "TextVentValueImageOpacity", "caption": "Deckkraft Hintergrundbild", "minimum": 0, "maximum": 100, "suffix": "%" }
             ]
         },
         {
@@ -78,66 +280,11 @@
         },
         {
             "type": "ExpansionPanel",
-            "caption": "Darstellung und Text",
-            "expanded": false,
+            "caption": "Balkenfarben",
             "items": [
-                {
-                    "type": "Select",
-                    "name": "NamePosition",
-                    "caption": "Position Kachelname",
-                    "options": [
-                        { "caption": "Oben links", "value": "top-left" },
-                        { "caption": "Oben rechts", "value": "top-right" },
-                        { "caption": "Unten links", "value": "bottom-left" },
-                        { "caption": "Unten rechts", "value": "bottom-right" },
-                        { "caption": "Mitte", "value": "center" }
-                    ]
-                },
                 { "type": "SelectColor", "name": "ColorCold", "caption": "Farbe kalt" },
                 { "type": "SelectColor", "name": "ColorWarm", "caption": "Farbe warm" },
-                { "type": "SelectColor", "name": "ColorVent", "caption": "Farbe Lüftung" },
-                { "type": "SelectColor", "name": "TextNameColor", "caption": "Kachelname – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextNameFont", "caption": "Kachelname – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextNameSize", "caption": "Kachelname – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextSeasonColor", "caption": "Saisonanzeige – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextSeasonFont", "caption": "Saisonanzeige – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextSeasonSize", "caption": "Saisonanzeige – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextActualLabelColor", "caption": "Istwert-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextActualLabelFont", "caption": "Istwert-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextActualLabelSize", "caption": "Istwert-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextActualValueColor", "caption": "Istwert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextActualValueFont", "caption": "Istwert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextActualValueSize", "caption": "Istwert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextTargetLabelColor", "caption": "Sollwert-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextTargetLabelFont", "caption": "Sollwert-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextTargetLabelSize", "caption": "Sollwert-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextTargetValueColor", "caption": "Sollwert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextTargetValueFont", "caption": "Sollwert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextTargetValueSize", "caption": "Sollwert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextHeatLabelColor", "caption": "Heizung-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextHeatLabelFont", "caption": "Heizung-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextHeatLabelSize", "caption": "Heizung-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextHeatValueColor", "caption": "Heizung-Wert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextHeatValueFont", "caption": "Heizung-Wert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextHeatValueSize", "caption": "Heizung-Wert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextCoolLabelColor", "caption": "Klima-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextCoolLabelFont", "caption": "Klima-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextCoolLabelSize", "caption": "Klima-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextCoolValueColor", "caption": "Klima-Wert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextCoolValueFont", "caption": "Klima-Wert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextCoolValueSize", "caption": "Klima-Wert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextCO2LabelColor", "caption": "CO₂-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextCO2LabelFont", "caption": "CO₂-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextCO2LabelSize", "caption": "CO₂-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextCO2ValueColor", "caption": "CO₂-Wert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextCO2ValueFont", "caption": "CO₂-Wert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextCO2ValueSize", "caption": "CO₂-Wert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextVentLabelColor", "caption": "Lüftung-Beschriftung – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextVentLabelFont", "caption": "Lüftung-Beschriftung – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextVentLabelSize", "caption": "Lüftung-Beschriftung – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" },
-                { "type": "SelectColor", "name": "TextVentValueColor", "caption": "Lüftung-Wert – Textfarbe" },
-                { "type": "ValidationTextBox", "name": "TextVentValueFont", "caption": "Lüftung-Wert – Schriftart (leer = Theme)" },
-                { "type": "NumberSpinner", "name": "TextVentValueSize", "caption": "Lüftung-Wert – Schriftgröße", "minimum": 8, "maximum": 48, "suffix": "px" }
+                { "type": "SelectColor", "name": "ColorVent", "caption": "Farbe Lüftung" }
             ]
         },
         {

@@ -53,6 +53,11 @@ class HeizungKlimaKachel extends IPSModule
             $this->RegisterPropertyInteger('Text' . $property . 'Color', -1);
             $this->RegisterPropertyString('Text' . $property . 'Font', '');
             $this->RegisterPropertyInteger('Text' . $property . 'Size', $fontSize);
+            $this->RegisterPropertyInteger('Text' . $property . 'BackgroundColor', -1);
+            $this->RegisterPropertyInteger('Text' . $property . 'BorderWidth', 0);
+            $this->RegisterPropertyInteger('Text' . $property . 'BorderColor', -1);
+            $this->RegisterPropertyInteger('Text' . $property . 'Image', 0);
+            $this->RegisterPropertyInteger('Text' . $property . 'ImageOpacity', 100);
         }
 
         // Variablen
@@ -178,9 +183,16 @@ class HeizungKlimaKachel extends IPSModule
         foreach (self::TEXT_ELEMENTS as $key => [$property]) {
             $fallbackColor = in_array($key, ['name', 'season'], true) ? $this->Col('TextColor', null) : null;
             $textStyles[$key] = [
-                'color'      => $this->Col('Text' . $property . 'Color', $fallbackColor),
-                'fontFamily' => $this->ReadPropertyString('Text' . $property . 'Font'),
-                'fontSize'   => $this->ReadPropertyInteger('Text' . $property . 'Size')
+                'color'            => $this->Col('Text' . $property . 'Color', $fallbackColor),
+                'fontFamily'       => $this->ReadPropertyString('Text' . $property . 'Font'),
+                'fontSize'         => $this->ReadPropertyInteger('Text' . $property . 'Size'),
+                'backgroundColor' => $this->Col('Text' . $property . 'BackgroundColor', null),
+                'borderWidth'      => $this->ReadPropertyInteger('Text' . $property . 'BorderWidth'),
+                'borderColor'      => $this->Col('Text' . $property . 'BorderColor', null),
+                'image'            => [
+                    'src'     => $this->GetMediaSource($this->ReadPropertyInteger('Text' . $property . 'Image')),
+                    'opacity' => $this->ReadPropertyInteger('Text' . $property . 'ImageOpacity')
+                ]
             ];
         }
 
@@ -236,21 +248,30 @@ class HeizungKlimaKachel extends IPSModule
         ];
 
         $id = $this->ReadPropertyInteger('BackgroundImage');
-        if ($id > 0 && IPS_MediaExists($id)) {
-            $media = IPS_GetMedia($id);
-            if ($media['MediaType'] === MEDIATYPE_IMAGE) {
-                $ext = strtolower(pathinfo($media['MediaFile'], PATHINFO_EXTENSION));
-                $mimes = [
-                    'jpg'  => 'image/jpeg',
-                    'jpeg' => 'image/jpeg',
-                    'gif'  => 'image/gif',
-                    'svg'  => 'image/svg+xml',
-                    'webp' => 'image/webp'
-                ];
-                $mime = $mimes[$ext] ?? 'image/png';
-                $result['src'] = 'data:' . $mime . ';base64,' . IPS_GetMediaContent($id);
-            }
-        }
+        $result['src'] = $this->GetMediaSource($id);
         return $result;
+    }
+
+    private function GetMediaSource(int $id): string
+    {
+        if ($id <= 0 || !IPS_MediaExists($id)) {
+            return '';
+        }
+
+        $media = IPS_GetMedia($id);
+        if ($media['MediaType'] !== MEDIATYPE_IMAGE) {
+            return '';
+        }
+
+        $ext = strtolower(pathinfo($media['MediaFile'], PATHINFO_EXTENSION));
+        $mimes = [
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'gif'  => 'image/gif',
+            'svg'  => 'image/svg+xml',
+            'webp' => 'image/webp'
+        ];
+        $mime = $mimes[$ext] ?? 'image/png';
+        return 'data:' . $mime . ';base64,' . IPS_GetMediaContent($id);
     }
 }

@@ -25,6 +25,15 @@
     .txt { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
            align-items: center; padding: 0 12px; font-size: 14px; color: #fff;
            text-shadow: 0 1px 3px rgba(0,0,0,.55); pointer-events: none; }
+    .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
+    #name.styled-text { position: absolute; }
+    .styled-text::before { content: ""; position: absolute; z-index: -2; inset: -2px -5px;
+                           border: var(--text-border-width, 0px) solid var(--text-border-color, transparent);
+                           border-radius: inherit; background-color: var(--text-background, transparent); pointer-events: none; }
+    .styled-text::after { content: ""; position: absolute; z-index: -1; inset: -2px -5px;
+                          border-radius: inherit; background-image: var(--text-image, none);
+                          background-size: cover; background-position: center;
+                          opacity: var(--text-image-opacity, 1); pointer-events: none; }
     .txt span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; }
 
     /* Ist + Soll fließen ineinander */
@@ -217,9 +226,17 @@
         Object.keys(targets).forEach(function (key) {
             const style = cfg.textStyles[key];
             const el = $(targets[key]);
+            el.classList.add('styled-text');
             el.style.color = style.color || '';
             el.style.fontFamily = style.fontFamily || '';
             el.style.fontSize = clamp(style.fontSize, 8, 48) + 'px';
+            el.style.setProperty('--text-background', style.backgroundColor || 'transparent');
+            el.style.setProperty('--text-border-width', clamp(style.borderWidth, 0, 12) + 'px');
+            el.style.setProperty('--text-border-color', style.borderColor || 'transparent');
+            const image = style.image || {};
+            const imageOpacity = clamp(isNum(image.opacity) ? image.opacity : 100, 0, 100) / 100;
+            el.style.setProperty('--text-image', image.src ? 'url("' + image.src + '")' : 'none');
+            el.style.setProperty('--text-image-opacity', String(imageOpacity));
         });
     }
 
