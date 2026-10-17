@@ -243,7 +243,7 @@
         const root = elementsByKey[key];
         const bar = $('bar-' + key);
         const readout = $('readout-' + key);
-        const textOnly = element.shape === 'text' || (!element.target && element.shape === 'straight');
+        const textOnly = element.shape === 'text';
         readout.style.display = textOnly ? 'inline-flex' : 'none';
         bar.style.display = textOnly ? 'none' : '';
         const vertical = element.orientation === 'vertical';

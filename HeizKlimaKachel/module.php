@@ -60,7 +60,10 @@ class BBModuleKlima extends IPSModule
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $position = $defaultPositions[$key];
-            $this->RegisterPropertyString('Display' . $property . 'Shape', $key === 'target' ? 'bar' : 'text');
+            $this->RegisterPropertyString(
+                'Display' . $property . 'Shape',
+                in_array($key, ['target', 'output'], true) ? 'bar' : 'text'
+            );
             $this->RegisterPropertyString('Display' . $property . 'Orientation', 'horizontal');
             $this->RegisterPropertyInteger('Position' . $property . 'X', $position[0]);
             $this->RegisterPropertyInteger('Position' . $property . 'Y', $position[1]);
@@ -241,7 +244,8 @@ class BBModuleKlima extends IPSModule
             'output' => [50, 72], 'extra' => [50, 88]
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
-            $defaults['Display' . $property . 'Shape'] = $key === 'target' ? 'bar' : 'text';
+            $defaults['Display' . $property . 'Shape'] =
+                in_array($key, ['target', 'output'], true) ? 'bar' : 'text';
             $defaults['Display' . $property . 'Orientation'] = 'horizontal';
             $defaults['Position' . $property . 'X'] = $defaultPositions[$key][0];
             $defaults['Position' . $property . 'Y'] = $defaultPositions[$key][1];

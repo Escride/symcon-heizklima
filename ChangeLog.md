@@ -3,7 +3,8 @@
 ## 2026-10-17
 
 - Fixed layout presets to size position arrays from the configured display elements.
-- Kept the target display straight when restoring optical defaults.
+- Restored straight-bar defaults for target and output displays; kept other read-only values text-only by default.
+- Rendered legacy straight display settings as bars after tile reload.
 - Set the module name and vendor to BB Module Klima and BBNBMe.
 - Matched the PHP module class name to the Symcon module name and incremented the library build.
 - Exposed the PayPal hosted donation URL as plain text because Symcon form labels escape HTML and button callbacks run as PHP.
