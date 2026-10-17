@@ -305,6 +305,7 @@ class BBModuleKlima extends IPSModule
             throw new InvalidArgumentException('Unknown layout preset: ' . $arguments);
         }
         $keys = array_keys(self::DISPLAY_ELEMENTS);
+        $count = count($keys);
         if ($arguments === 'bars-side' || $arguments === 'arcs-side') {
             $positions = [13, 38, 62, 87];
             $yPositions = array_fill(0, $count, 50);
