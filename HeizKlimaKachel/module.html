@@ -29,7 +29,6 @@
     .readout.external { position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%);
                         pointer-events: none; }
     .readout-value { font-weight: 600; font-variant-numeric: tabular-nums; }
-    .element[data-key="permission"] .readout { flex-direction: column; align-items: center; gap: .15em; }
     .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
     .styled-text::before { content: ""; position: absolute; z-index: -2; inset: -2px -5px;
                            border: var(--text-border-width, 0px) solid var(--text-border-color, transparent);
@@ -173,52 +172,50 @@
         readout.append(readoutLabel, readoutValue);
         root.appendChild(readout);
 
-        if (key !== 'permission') {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            bar.id = 'bar-' + key;
-            const fill = document.createElement('div');
-            fill.className = 'fill';
-            fill.id = 'fill-' + key;
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('class', 'arc-meter');
-            svg.setAttribute('viewBox', '0 0 100 100');
-            svg.setAttribute('aria-hidden', 'true');
-            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-            gradient.setAttribute('id', 'arc-gradient-' + key);
-            gradient.setAttribute('x1', '0');
-            gradient.setAttribute('y1', '0');
-            gradient.setAttribute('x2', '100');
-            gradient.setAttribute('y2', '0');
-            gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
-            const stops = [0, 50, 100].map(function () {
-                return document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-            });
-            stops.forEach(stop => gradient.appendChild(stop));
-            defs.appendChild(gradient);
-            const track = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            track.setAttribute('class', 'arc-track');
-            track.setAttribute('pathLength', '100');
-            const progress = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            progress.setAttribute('class', 'arc-progress');
-            progress.setAttribute('pathLength', '100');
-            svg.append(defs, track, progress);
-            const thumb = document.createElement('div');
-            thumb.className = 'thumb';
-            thumb.id = 'thumb-' + key;
-            const text = document.createElement('div');
-            text.className = 'bar-text';
-            const label = document.createElement('span');
-            label.className = 'element-label';
-            label.id = 'bar-label-' + key;
-            const value = document.createElement('span');
-            value.className = 'element-value';
-            value.id = 'bar-value-' + key;
-            text.append(label, value);
-            bar.append(fill, svg, thumb, text);
-            root.appendChild(bar);
-        }
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.id = 'bar-' + key;
+        const fill = document.createElement('div');
+        fill.className = 'fill';
+        fill.id = 'fill-' + key;
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'arc-meter');
+        svg.setAttribute('viewBox', '0 0 100 100');
+        svg.setAttribute('aria-hidden', 'true');
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        gradient.setAttribute('id', 'arc-gradient-' + key);
+        gradient.setAttribute('x1', '0');
+        gradient.setAttribute('y1', '0');
+        gradient.setAttribute('x2', '100');
+        gradient.setAttribute('y2', '0');
+        gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+        const stops = [0, 50, 100].map(function () {
+            return document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        });
+        stops.forEach(stop => gradient.appendChild(stop));
+        defs.appendChild(gradient);
+        const track = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        track.setAttribute('class', 'arc-track');
+        track.setAttribute('pathLength', '100');
+        const progress = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        progress.setAttribute('class', 'arc-progress');
+        progress.setAttribute('pathLength', '100');
+        svg.append(defs, track, progress);
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        thumb.id = 'thumb-' + key;
+        const text = document.createElement('div');
+        text.className = 'bar-text';
+        const label = document.createElement('span');
+        label.className = 'element-label';
+        label.id = 'bar-label-' + key;
+        const value = document.createElement('span');
+        value.className = 'element-value';
+        value.id = 'bar-value-' + key;
+        text.append(label, value);
+        bar.append(fill, svg, thumb, text);
+        root.appendChild(bar);
         $('elements').appendChild(root);
         elementsByKey[key] = root;
     }
@@ -407,21 +404,10 @@
         root.style.left = clamp(element.x, 0, 100) + '%';
         root.style.top = clamp(element.y, 0, 100) + '%';
         if (!element.available) return;
-        if (key === 'permission') {
-            const status = vals.permission ? 'Freigegeben' : 'Gesperrt';
-            $('readout-label-permission').textContent = element.label || '';
-            $('readout-value-permission').textContent = status;
-            $('readout-permission').style.transform = 'translate(' +
-                (isNum(element.textOffsetX) ? element.textOffsetX : 0) + 'px, ' +
-                (isNum(element.textOffsetY) ? element.textOffsetY : 0) + 'px)';
-            applyTextStyle($('readout-label-permission'), element.styles && element.styles.label);
-            applyTextStyle($('readout-value-permission'), element.styles && element.styles.value);
-            return;
-        }
         root.style.width = element.shape === 'text' ? 'auto' : '';
         root.style.height = '';
         root.classList.toggle('disabled', element.target && (
-            !element.controllable || (element.permissionKey && !vals[element.permissionKey]) ||
+            !element.controllable || vals.permissionAllowed === false ||
             element.shape === 'text'));
         const value = activeDrag && activeDrag.key === key ? activeDrag.value : vals[element.valueKey];
         renderBar(key, element, value, true);
@@ -432,7 +418,7 @@
         const bar = $('bar-' + key);
         const root = elementsByKey[key];
         const canControl = element.controllable && element.shape !== 'text' &&
-            (!element.permissionKey || vals[element.permissionKey] === true);
+            vals.permissionAllowed !== false;
         if (!canControl || !element.available) {
             root.classList.add('disabled');
             bar.style.pointerEvents = 'none';

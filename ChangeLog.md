@@ -13,6 +13,8 @@
 - Set the module name and vendor to BB Module Klima and BBNBMe.
 - Matched the PHP module class name to the Symcon module name and incremented the library build.
 - Exposed the PayPal hosted donation URL as plain text because Symcon form labels escape HTML and button callbacks run as PHP.
+- Added a per-tile JSON string output for shared visual configuration, including media IDs, plus selectable global configuration with per-section local overrides.
+- Kept value and permission variable bindings local, and removed the visible permission status while retaining its target-control lock.
 
 ## 2026-10-17
 

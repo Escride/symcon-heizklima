@@ -4,6 +4,7 @@
       "type": "ExpansionPanel",
       "caption": "Kachel",
       "items": [
+        { "type": "CheckBox", "name": "UseLocalTileConfiguration", "caption": "Nicht Global verwenden" },
         {
           "type": "RowLayout",
           "items": [
@@ -79,6 +80,7 @@
       "items": [
         { "type": "Label", "label": "Der Istwert verwendet denselben Min-/Max-Bereich und Farbmittelpunkt wie der Sollwert." },
         { "type": "SelectVariable", "name": "ActualVar", "caption": "Istwert-Variable", "validVariableTypes": [1, 2] },
+        { "type": "CheckBox", "name": "UseLocalActualConfiguration", "caption": "Nicht Global verwenden" },
         {
           "type": "RowLayout",
           "items": [
@@ -175,6 +177,7 @@
       "caption": "Sollwert",
       "items": [
         { "type": "SelectVariable", "name": "TargetVar", "caption": "Sollwert-Variable", "validVariableTypes": [1, 2], "requiredAction": 0 },
+        { "type": "CheckBox", "name": "UseLocalTargetConfiguration", "caption": "Nicht Global verwenden" },
         {
           "type": "RowLayout",
           "items": [
@@ -282,6 +285,7 @@
       "caption": "Stellwert / Leistung",
       "items": [
         { "type": "SelectVariable", "name": "OutputVar", "caption": "Stellwert- oder Leistungsvariable", "validVariableTypes": [1, 2] },
+        { "type": "CheckBox", "name": "UseLocalOutputConfiguration", "caption": "Nicht Global verwenden" },
         {
           "type": "RowLayout",
           "items": [
@@ -381,6 +385,7 @@
       "caption": "Zusatzwert",
       "items": [
         { "type": "SelectVariable", "name": "ExtraVar", "caption": "Zusätzliche Anzeigevariable", "validVariableTypes": [1, 2] },
+        { "type": "CheckBox", "name": "UseLocalExtraConfiguration", "caption": "Nicht Global verwenden" },
         {
           "type": "RowLayout",
           "items": [
@@ -479,43 +484,16 @@
       "type": "ExpansionPanel",
       "caption": "Freigabe",
       "items": [
-        { "type": "Label", "label": "Die optionale BOOL-Variable zeigt den Freigabestatus an und sperrt die Sollwerteinstellung bei FALSE. Ohne Variable ist die Einstellung erlaubt." },
-        { "type": "SelectVariable", "name": "PermissionVar", "caption": "Freigabe-BOOL-Variable", "validVariableTypes": [0] },
-        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Textelements an." },
-        {
-          "type": "RowLayout",
-          "items": [
-            { "type": "ValidationTextBox", "name": "LabelPermission", "caption": "Beschriftung" },
-            { "type": "NumberSpinner", "name": "PositionPermissionX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionPermissionY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "DisplayPermissionTextOffsetX", "caption": "Text X-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" },
-            { "type": "NumberSpinner", "name": "DisplayPermissionTextOffsetY", "caption": "Text Y-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" }
-          ]
-        },
-        {
-          "type": "RowLayout",
-          "items": [
-            { "type": "ValidationTextBox", "name": "TextPermissionFont", "caption": "Schriftart" },
-            { "type": "NumberSpinner", "name": "TextPermissionSize", "caption": "Schriftgröße", "minimum": 0.5, "maximum": 3, "digits": 2, "suffix": "rem" },
-            { "type": "SelectColor", "name": "TextPermissionColor", "caption": "Textfarbe" },
-            { "type": "SelectColor", "name": "TextPermissionBackgroundColor", "caption": "Texthintergrund" }
-          ]
-        },
-        {
-          "type": "RowLayout",
-          "items": [
-            { "type": "NumberSpinner", "name": "TextPermissionBorderWidth", "caption": "Textrahmenbreite", "minimum": 0, "maximum": 12, "suffix": "px" },
-            { "type": "SelectColor", "name": "TextPermissionBorderColor", "caption": "Textrahmenfarbe" },
-            { "type": "SelectMedia", "name": "TextPermissionImage", "caption": "Bild hinter dem Text", "mediaType": 1 },
-            { "type": "NumberSpinner", "name": "TextPermissionImageOpacity", "caption": "Bilddeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" }
-          ]
-        }
+        { "type": "Label", "label": "Die BOOL-Freigabe wird nicht angezeigt. Bei FALSE ist der Sollwertschieber nicht bedienbar. Ohne zugeordnete Variable bleibt die Bedienung erlaubt." },
+        { "type": "SelectVariable", "name": "PermissionVar", "caption": "Freigabe-BOOL-Variable", "validVariableTypes": [0] }
       ]
     },
     {
       "type": "ExpansionPanel",
       "caption": "Sonstiges",
       "items": [
+        { "type": "Label", "label": "GLOBALE KACHELKONFIGURATION – jede Kachel stellt eine eigene JSON-Stringvariable bereit. Wähle sie bei anderen Kacheln als Vorlage; Änderungen werden automatisch übernommen. Variablenbindungen bleiben lokal." },
+        { "type": "SelectVariable", "name": "GlobalConfigurationVar", "caption": "Globale Kachelkonfiguration verwenden", "validVariableTypes": [3] },
         { "type": "Label", "label": "LAYOUTVORLAGEN – ordnen die Anzeigeelemente für alle eingestellten Variablen an." },
         {
           "type": "RowLayout",
