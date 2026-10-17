@@ -4,6 +4,23 @@ declare(strict_types=1);
 
 class HeizungKlimaKachel extends IPSModule
 {
+    private const TEXT_ELEMENTS = [
+        'name'        => ['Name', 18],
+        'season'      => ['Season', 13],
+        'actualLabel' => ['ActualLabel', 14],
+        'actualValue' => ['ActualValue', 14],
+        'targetLabel' => ['TargetLabel', 14],
+        'targetValue' => ['TargetValue', 14],
+        'heatLabel'   => ['HeatLabel', 14],
+        'heatValue'   => ['HeatValue', 14],
+        'coolLabel'   => ['CoolLabel', 14],
+        'coolValue'   => ['CoolValue', 14],
+        'co2Label'    => ['CO2Label', 14],
+        'co2Value'    => ['CO2Value', 14],
+        'ventLabel'   => ['VentLabel', 14],
+        'ventValue'   => ['VentValue', 14]
+    ];
+
     // Schlüssel in der Kachel => Name der Eigenschaft (Variable)
     private const VARS = [
         'season'      => 'SeasonVar',
@@ -30,6 +47,13 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyString('LabelCool', 'Klima');
         $this->RegisterPropertyString('LabelCO2', 'CO₂');
         $this->RegisterPropertyString('LabelVent', 'Lüftung');
+        $this->RegisterPropertyString('NamePosition', 'top-left');
+
+        foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
+            $this->RegisterPropertyInteger('Text' . $property . 'Color', -1);
+            $this->RegisterPropertyString('Text' . $property . 'Font', '');
+            $this->RegisterPropertyInteger('Text' . $property . 'Size', $fontSize);
+        }
 
         // Variablen
         foreach (self::VARS as $prop) {
@@ -150,9 +174,21 @@ class HeizungKlimaKachel extends IPSModule
             $has[$key] = ($id > 0 && IPS_VariableExists($id));
         }
 
+        $textStyles = [];
+        foreach (self::TEXT_ELEMENTS as $key => [$property]) {
+            $fallbackColor = in_array($key, ['name', 'season'], true) ? $this->Col('TextColor', null) : null;
+            $textStyles[$key] = [
+                'color'      => $this->Col('Text' . $property . 'Color', $fallbackColor),
+                'fontFamily' => $this->ReadPropertyString('Text' . $property . 'Font'),
+                'fontSize'   => $this->ReadPropertyInteger('Text' . $property . 'Size')
+            ];
+        }
+
         return [
             'config' => [
                 'name'         => $this->ReadPropertyString('Name'),
+                'namePosition' => $this->ReadPropertyString('NamePosition'),
+                'textStyles'   => $textStyles,
                 'labels'       => [
                     'actual' => $this->ReadPropertyString('LabelActual'),
                     'target' => $this->ReadPropertyString('LabelTarget'),

@@ -8,12 +8,13 @@
     #bgcolor, #bgimg { position: absolute; pointer-events: none; }
     #bgcolor { top: 0; left: 0; right: 0; bottom: 0; }
     #bgimg { background-repeat: no-repeat; display: none; }
+    #name { position: absolute; z-index: 2; max-width: calc(100% - 24px); pointer-events: none; }
 
     #content { position: relative; z-index: 1; height: 100%; padding: 12px; display: flex;
                flex-direction: column; justify-content: center; gap: 10px; overflow: auto; }
 
-    #head { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 1.15em; }
-    #season { font-size: .8em; font-weight: 500; opacity: .85; }
+    #head { display: flex; justify-content: flex-end; align-items: baseline; }
+    #season { font-weight: 500; opacity: .85; }
 
     .row { display: flex; gap: 6px; align-items: stretch; }
 
@@ -22,7 +23,7 @@
     .grad { position: absolute; top: 0; left: 0; right: 0; bottom: 0; clip-path: inset(0 100% 0 0);
             transition: clip-path .4s ease; }
     .txt { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
-           align-items: center; padding: 0 12px; font-size: .9em; color: #fff;
+           align-items: center; padding: 0 12px; font-size: 14px; color: #fff;
            text-shadow: 0 1px 3px rgba(0,0,0,.55); pointer-events: none; }
     .txt span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; }
 
@@ -49,9 +50,10 @@
 <div id="tile">
     <div id="bgcolor"></div>
     <div id="bgimg"></div>
+    <div id="name"></div>
 
     <div id="content">
-        <div id="head"><span id="name"></span><span id="season"></span></div>
+        <div id="head"><span id="season"></span></div>
 
         <!-- Ist- und Sollwert -->
         <div id="block">
@@ -172,6 +174,55 @@
         if (im.pos !== 'center') el.style.transform = '';
     }
 
+    function applyNamePosition() {
+        const el = $('name');
+        el.style.top = el.style.right = el.style.bottom = el.style.left = '';
+        el.style.transform = '';
+        switch (cfg.namePosition) {
+            case 'top-right':
+                el.style.top = el.style.right = '12px';
+                break;
+            case 'bottom-left':
+                el.style.bottom = el.style.left = '12px';
+                break;
+            case 'bottom-right':
+                el.style.bottom = el.style.right = '12px';
+                break;
+            case 'center':
+                el.style.top = el.style.left = '50%';
+                el.style.transform = 'translate(-50%,-50%)';
+                break;
+            default:
+                el.style.top = el.style.left = '12px';
+        }
+    }
+
+    function applyTextStyles() {
+        const targets = {
+            name: 'name',
+            season: 'season',
+            actualLabel: 'actLbl',
+            actualValue: 'actVal',
+            targetLabel: 'tgtLbl',
+            targetValue: 'tgtVal',
+            heatLabel: 'heatLbl',
+            heatValue: 'heatVal',
+            coolLabel: 'coolLbl',
+            coolValue: 'coolVal',
+            co2Label: 'co2Lbl',
+            co2Value: 'co2Val',
+            ventLabel: 'ventLbl',
+            ventValue: 'ventVal'
+        };
+        Object.keys(targets).forEach(function (key) {
+            const style = cfg.textStyles[key];
+            const el = $(targets[key]);
+            el.style.color = style.color || '';
+            el.style.fontFamily = style.fontFamily || '';
+            el.style.fontSize = clamp(style.fontSize, 8, 48) + 'px';
+        });
+    }
+
     function renderTarget() {
         const v = dragging ? dragVal : vals.target;
         const p = isNum(v) ? pct(v, cfg.min, cfg.max) : 0;
@@ -206,6 +257,8 @@
         if (!cfg) return;
         const has = cfg.has;
         applyBackground();
+        applyNamePosition();
+        applyTextStyles();
 
         // Kopf
         $('name').textContent = cfg.name;
