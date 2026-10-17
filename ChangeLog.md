@@ -2,6 +2,11 @@
 
 ## 2026-10-17
 
+- Set the module name and vendor to BB Module Klima and BBNBMe.
+- Matched the PHP module class name to the Symcon module name and incremented the library build.
+
+## 2026-10-17
+
 - Replaced heater-, ventilation-, and climate-specific settings with generic actual, target, output, additional-value, and permission sections.
 - Shared the target input range with its matching actual value; made output and additional display values text-only by default.
 - Added side-by-side bar presets and placed curved-scale text in the open center of each semicircle.

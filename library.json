@@ -1,10 +1,10 @@
 {
     "id": "{764764BF-327E-1C99-9B71-2C1D064F2F99}",
-    "author": "Eigenbau",
-    "name": "UniverselleVariablenKachel",
+    "author": "BBNBMe",
+    "name": "BBModuleKlima",
     "url": "",
     "version": "1.0",
-    "build": 1,
+    "build": 2,
     "date": 0,
     "compatibility": {
         "version": "7.0"

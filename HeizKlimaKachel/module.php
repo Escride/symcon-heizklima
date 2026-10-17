@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-class HeizungKlimaKachel extends IPSModule
+class BBModuleKlima extends IPSModule
 {
     private const TEXT_ELEMENTS = [
         'name'       => ['Name', 1.125],
