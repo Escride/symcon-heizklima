@@ -5,20 +5,20 @@ declare(strict_types=1);
 class HeizungKlimaKachel extends IPSModule
 {
     private const TEXT_ELEMENTS = [
-        'name'        => ['Name', 18],
-        'season'      => ['Season', 13],
-        'actualLabel' => ['ActualLabel', 14],
-        'actualValue' => ['ActualValue', 14],
-        'targetLabel' => ['TargetLabel', 14],
-        'targetValue' => ['TargetValue', 14],
-        'heatLabel'   => ['HeatLabel', 14],
-        'heatValue'   => ['HeatValue', 14],
-        'coolLabel'   => ['CoolLabel', 14],
-        'coolValue'   => ['CoolValue', 14],
-        'co2Label'    => ['CO2Label', 14],
-        'co2Value'    => ['CO2Value', 14],
-        'ventLabel'   => ['VentLabel', 14],
-        'ventValue'   => ['VentValue', 14]
+        'name'        => ['Name', 1.125],
+        'season'      => ['Season', 0.9],
+        'actualLabel' => ['ActualLabel', 0.875],
+        'actualValue' => ['ActualValue', 0.875],
+        'targetLabel' => ['TargetLabel', 0.875],
+        'targetValue' => ['TargetValue', 0.875],
+        'heatLabel'   => ['HeatLabel', 0.875],
+        'heatValue'   => ['HeatValue', 0.875],
+        'coolLabel'   => ['CoolLabel', 0.875],
+        'coolValue'   => ['CoolValue', 0.875],
+        'co2Label'    => ['CO2Label', 0.875],
+        'co2Value'   => ['CO2Value', 0.875],
+        'ventLabel'   => ['VentLabel', 0.875],
+        'ventValue'   => ['VentValue', 0.875]
     ];
 
     // Schlüssel in der Kachel => Name der Eigenschaft (Variable)
@@ -52,9 +52,9 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyInteger('NameOffsetY', 0);
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
-            $this->RegisterPropertyInteger('Text' . $property . 'Color', hexdec('FFFFFF'));
+            $this->RegisterPropertyInteger('Text' . $property . 'Color', 0);
             $this->RegisterPropertyString('Text' . $property . 'Font', '');
-            $this->RegisterPropertyInteger('Text' . $property . 'Size', $fontSize);
+            $this->RegisterPropertyFloat('Text' . $property . 'Size', $fontSize);
             $this->RegisterPropertyInteger('Text' . $property . 'BackgroundColor', -1);
             $this->RegisterPropertyInteger('Text' . $property . 'BorderWidth', 0);
             $this->RegisterPropertyInteger('Text' . $property . 'BorderColor', -1);
@@ -183,10 +183,14 @@ class HeizungKlimaKachel extends IPSModule
 
         $textStyles = [];
         foreach (self::TEXT_ELEMENTS as $key => [$property]) {
+            $fontSize = $this->ReadPropertyFloat('Text' . $property . 'Size');
+            if ($fontSize > 4) {
+                $fontSize /= 16;
+            }
             $textStyles[$key] = [
                 'color'           => $this->TextCol('Text' . $property . 'Color'),
                 'fontFamily'      => $this->ReadPropertyString('Text' . $property . 'Font'),
-                'fontSize'        => $this->ReadPropertyInteger('Text' . $property . 'Size'),
+                'fontSize'        => $fontSize,
                 'backgroundColor' => $this->Col('Text' . $property . 'BackgroundColor', null),
                 'borderWidth'      => $this->ReadPropertyInteger('Text' . $property . 'BorderWidth'),
                 'borderColor'      => $this->Col('Text' . $property . 'BorderColor', null),
