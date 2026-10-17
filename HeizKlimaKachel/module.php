@@ -696,7 +696,7 @@ class BBModuleKlima extends IPSModule
                         ? is_bool($value)
                         : ($type === 'integer'
                             ? is_int($value)
-                            : (is_int($value) || (is_float($value) && is_finite($value))));
+                            : (is_int($value) || (is_float($value) && is_finite($value)))));
                 if ($valid) {
                     $configuration[$group][$property] = $value;
                 } else {
