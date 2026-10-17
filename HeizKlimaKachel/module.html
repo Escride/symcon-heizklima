@@ -7,12 +7,11 @@
     #bgimg { background-repeat: no-repeat; display: none; }
     #name { position: absolute; z-index: 2; max-width: calc(100% - 24px); pointer-events: none; }
     #elements { position: absolute; inset: 0; }
-    .element { position: absolute; z-index: 1; transform: translate(-50%, -50%); }
-    .bar { position: relative; width: 100%; height: 2.25rem; border-radius: .65rem; overflow: hidden;
+    .element { position: absolute; z-index: 1; }
+    .bar { position: absolute; left: 50%; top: 50%; margin: 0; width: 100%; height: 2.25rem; border-radius: .65rem; overflow: hidden;
            background: rgba(128,128,128,.28); }
-    .bar.vertical { width: 2.5rem; height: 9rem; margin: auto; }
+    .bar.vertical { width: 2.5rem; height: 9rem; margin: 0; }
     .bar.arc { height: auto; aspect-ratio: 1; overflow: visible; background: transparent; }
-    .bar.arc { transform: none !important; }
     .fill { position: absolute; inset: 0; transform-origin: left center; clip-path: inset(0 100% 0 0); }
     .bar.vertical .fill { clip-path: inset(100% 0 0 0); }
     .arc-meter { display: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -255,7 +254,7 @@
         bar.classList.toggle('vertical', vertical && !arc);
         bar.classList.toggle('arc', arc);
         const angle = clamp(isNum(element.angle) ? element.angle : 0, -90, 90);
-        bar.style.transform = arc ? '' : 'rotate(' + angle + 'deg)';
+        bar.style.transform = 'translate(-50%, -50%) rotate(' + (arc ? 0 : angle) + 'deg)';
         readout.classList.toggle('external', externalText);
         readout.style.display = textOnly || externalText ? 'inline-flex' : 'none';
         bar.querySelector('.bar-text').style.display = externalText ? 'none' : '';
@@ -263,15 +262,25 @@
         if (textOnly) {
             root.style.width = 'auto';
             root.style.height = 'auto';
-            bar.style.height = '';
-        } else if (vertical && !arc) {
-            root.style.width = '2.5rem';
-            root.style.height = width + '%';
-            bar.style.height = '100%';
         } else {
-            root.style.width = width + '%';
-            root.style.height = '';
-            bar.style.height = arc ? 'auto' : '2.25rem';
+            const tileWidth = $('tile').clientWidth;
+            const tileHeight = $('tile').clientHeight;
+            const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const barWidth = arc
+                ? tileWidth * width / 100
+                : vertical ? 2.5 * rem : tileWidth * width / 100;
+            const barHeight = arc
+                ? barWidth
+                : vertical ? tileHeight * width / 100 : 2.25 * rem;
+            const radians = (arc ? 0 : angle) * Math.PI / 180;
+            const boundsWidth = Math.abs(Math.cos(radians)) * barWidth +
+                Math.abs(Math.sin(radians)) * barHeight;
+            const boundsHeight = Math.abs(Math.sin(radians)) * barWidth +
+                Math.abs(Math.cos(radians)) * barHeight;
+            root.style.width = boundsWidth + 'px';
+            root.style.height = boundsHeight + 'px';
+            bar.style.width = barWidth + 'px';
+            bar.style.height = barHeight + 'px';
         }
         bar.style.border = clamp(element.borderWidth || 0, 0, 12) + 'px solid ' +
             (element.borderColor || 'transparent');
@@ -502,6 +511,8 @@
             configureTarget(key, element);
         });
     }
+
+    window.addEventListener('resize', render);
 
     window.handleMessage = function (message) {
         const data = typeof message === 'string' ? JSON.parse(message) : message;

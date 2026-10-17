@@ -130,11 +130,12 @@
             }
           ]
         },
+        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Anzeige-Rechtecks an. Bei geneigten Balken zählt das umschließende Rechteck der gedrehten Außenkante." },
         {
           "type": "RowLayout",
           "items": [
-            { "type": "NumberSpinner", "name": "PositionActualX", "caption": "Position X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionActualY", "caption": "Position Y", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionActualX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionActualY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayActualWidth", "caption": "Breite / Skalenweite", "minimum": 10, "maximum": 100, "suffix": "%" }
           ]
         },
@@ -236,11 +237,12 @@
             }
           ]
         },
+        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Anzeige-Rechtecks an. Bei geneigten Balken zählt das umschließende Rechteck der gedrehten Außenkante." },
         {
           "type": "RowLayout",
           "items": [
-            { "type": "NumberSpinner", "name": "PositionTargetX", "caption": "Position X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionTargetY", "caption": "Position Y", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionTargetX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionTargetY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayTargetWidth", "caption": "Breite / Skalenweite", "minimum": 10, "maximum": 100, "suffix": "%" }
           ]
         },
@@ -341,11 +343,12 @@
             { "type": "NumberSpinner", "name": "DisplayOutputSweepAngle", "caption": "Skalenwinkel", "minimum": -359, "maximum": 359, "suffix": "°" }
           ]
         },
+        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Anzeige-Rechtecks an. Bei geneigten Balken zählt das umschließende Rechteck der gedrehten Außenkante." },
         {
           "type": "RowLayout",
           "items": [
-            { "type": "NumberSpinner", "name": "PositionOutputX", "caption": "Position X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionOutputY", "caption": "Position Y", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionOutputX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionOutputY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayOutputWidth", "caption": "Breite / Skalenweite", "minimum": 10, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayOutputTextOffsetX", "caption": "Text X-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" },
             { "type": "NumberSpinner", "name": "DisplayOutputTextOffsetY", "caption": "Text Y-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" }
@@ -439,11 +442,12 @@
             { "type": "NumberSpinner", "name": "DisplayExtraSweepAngle", "caption": "Skalenwinkel", "minimum": -359, "maximum": 359, "suffix": "°" }
           ]
         },
+        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Anzeige-Rechtecks an. Bei geneigten Balken zählt das umschließende Rechteck der gedrehten Außenkante." },
         {
           "type": "RowLayout",
           "items": [
-            { "type": "NumberSpinner", "name": "PositionExtraX", "caption": "Position X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionExtraY", "caption": "Position Y", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionExtraX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionExtraY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayExtraWidth", "caption": "Breite / Skalenweite", "minimum": 10, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayExtraTextOffsetX", "caption": "Text X-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" },
             { "type": "NumberSpinner", "name": "DisplayExtraTextOffsetY", "caption": "Text Y-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" }
@@ -477,12 +481,13 @@
       "items": [
         { "type": "Label", "label": "Die optionale BOOL-Variable zeigt den Freigabestatus an und sperrt die Sollwerteinstellung bei FALSE. Ohne Variable ist die Einstellung erlaubt." },
         { "type": "SelectVariable", "name": "PermissionVar", "caption": "Freigabe-BOOL-Variable", "validVariableTypes": [0] },
+        { "type": "Label", "label": "X/Y geben die obere linke Ecke des Textelements an." },
         {
           "type": "RowLayout",
           "items": [
             { "type": "ValidationTextBox", "name": "LabelPermission", "caption": "Beschriftung" },
-            { "type": "NumberSpinner", "name": "PositionPermissionX", "caption": "Position X", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "NumberSpinner", "name": "PositionPermissionY", "caption": "Position Y", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionPermissionX", "caption": "Obere linke Kante X", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "NumberSpinner", "name": "PositionPermissionY", "caption": "Obere linke Kante Y", "minimum": 0, "maximum": 100, "suffix": "%" },
             { "type": "NumberSpinner", "name": "DisplayPermissionTextOffsetX", "caption": "Text X-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" },
             { "type": "NumberSpinner", "name": "DisplayPermissionTextOffsetY", "caption": "Text Y-Versatz", "minimum": -200, "maximum": 200, "suffix": "px" }
           ]

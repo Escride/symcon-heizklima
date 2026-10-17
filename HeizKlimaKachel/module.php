@@ -53,10 +53,10 @@ class BBModuleKlima extends IPSModule
         $this->RegisterPropertyInteger('NameOffsetY', 0);
 
         $defaultPositions = [
-            'actual' => [50, 35],
-            'target' => [50, 55],
-            'output' => [50, 72],
-            'extra'  => [50, 88]
+            'actual' => [11, 20],
+            'target' => [11, 40],
+            'output' => [11, 60],
+            'extra'  => [11, 80]
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $position = $defaultPositions[$key];
@@ -242,8 +242,8 @@ class BBModuleKlima extends IPSModule
         }
 
         $defaultPositions = [
-            'actual' => [50, 35], 'target' => [50, 55],
-            'output' => [50, 72], 'extra' => [50, 88]
+            'actual' => [11, 20], 'target' => [11, 40],
+            'output' => [11, 60], 'extra' => [11, 80]
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $defaults['Display' . $property . 'Shape'] =
@@ -314,18 +314,24 @@ class BBModuleKlima extends IPSModule
         }
         $keys = array_keys(self::DISPLAY_ELEMENTS);
         $count = count($keys);
-        if ($arguments === 'bars-side' || $arguments === 'arcs-side') {
-            $positions = [13, 38, 62, 87];
-            $yPositions = array_fill(0, $count, 50);
+        $isArc = strpos($arguments, 'arcs-') === 0;
+        $isSide = strpos($arguments, '-side') !== false;
+        if ($isSide && $isArc) {
+            $positions = [2, 27, 51, 76];
+            $yPositions = array_fill(0, $count, 39);
+        } elseif ($isSide) {
+            $positions = [8, 32, 56, 80];
+            $yPositions = array_fill(0, $count, 10);
+        } elseif ($isArc) {
+            $positions = array_fill(0, $count, 38);
+            $yPositions = [3, 27, 51, 75];
         } else {
-            $positions = array_fill(0, $count, 50);
-            $yPositions = [15, 38, 62, 85];
+            $positions = array_fill(0, $count, 10);
+            $yPositions = [10, 32, 54, 76];
         }
 
         foreach ($keys as $index => $key) {
             [$property] = self::DISPLAY_ELEMENTS[$key];
-            $isArc = strpos($arguments, 'arcs-') === 0;
-            $isSide = strpos($arguments, '-side') !== false;
             $settings = [
                 'Display' . $property . 'Shape' => $isArc ? 'arc' : 'bar',
                 'Display' . $property . 'Orientation' => $isSide && !$isArc ? 'vertical' : 'horizontal',
