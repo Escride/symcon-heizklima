@@ -5,6 +5,9 @@
 - Fixed layout presets to size position arrays from the configured display elements.
 - Restored straight-bar defaults for target and output displays; kept other read-only values text-only by default.
 - Rendered legacy straight display settings as bars after tile reload.
+- Added per-variable outside/inside bar text placement and adjustable bar inclination; side labels follow the bar angle.
+- Made the actual-value display a bar in appearance defaults and made the Symcon palette background transparent.
+- Moved tile background settings into the Kachel panel and clarified the bar rotation control in degrees.
 - Set the module name and vendor to BB Module Klima and BBNBMe.
 - Matched the PHP module class name to the Symcon module name and incremented the library build.
 - Exposed the PayPal hosted donation URL as plain text because Symcon form labels escape HTML and button callbacks run as PHP.

@@ -28,7 +28,7 @@ class BBModuleKlima extends IPSModule
     ];
 
     private const COLOR_PALETTES = [
-        'symcon' => ['F2F5F8', '17212B', '2774AE', 'E69A36'],
+        'symcon' => [null, '17212B', '2774AE', 'E69A36'],
         'classic' => ['EFE7D3', '392F24', '447744', 'BD542B'],
         'modern' => ['F3F4F6', '111827', '2563EB', 'F97316'],
         'futuristic' => ['0B1020', 'EAF2FF', '00D9FF', '8B5CF6'],
@@ -62,12 +62,14 @@ class BBModuleKlima extends IPSModule
             $position = $defaultPositions[$key];
             $this->RegisterPropertyString(
                 'Display' . $property . 'Shape',
-                in_array($key, ['target', 'output'], true) ? 'bar' : 'text'
+                in_array($key, ['actual', 'target', 'output'], true) ? 'bar' : 'text'
             );
             $this->RegisterPropertyString('Display' . $property . 'Orientation', 'horizontal');
             $this->RegisterPropertyInteger('Position' . $property . 'X', $position[0]);
             $this->RegisterPropertyInteger('Position' . $property . 'Y', $position[1]);
             $this->RegisterPropertyInteger('Display' . $property . 'Width', 78);
+            $this->RegisterPropertyInteger('Display' . $property . 'Angle', 0);
+            $this->RegisterPropertyString('Display' . $property . 'TextPosition', 'above');
             $this->RegisterPropertyInteger('Display' . $property . 'StartAngle', 0);
             $this->RegisterPropertyInteger('Display' . $property . 'SweepAngle', 180);
             $this->RegisterPropertyInteger('Display' . $property . 'BorderWidth', 0);
@@ -245,11 +247,13 @@ class BBModuleKlima extends IPSModule
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $defaults['Display' . $property . 'Shape'] =
-                in_array($key, ['target', 'output'], true) ? 'bar' : 'text';
+                in_array($key, ['actual', 'target', 'output'], true) ? 'bar' : 'text';
             $defaults['Display' . $property . 'Orientation'] = 'horizontal';
             $defaults['Position' . $property . 'X'] = $defaultPositions[$key][0];
             $defaults['Position' . $property . 'Y'] = $defaultPositions[$key][1];
             $defaults['Display' . $property . 'Width'] = 78;
+            $defaults['Display' . $property . 'Angle'] = 0;
+            $defaults['Display' . $property . 'TextPosition'] = 'above';
             $defaults['Display' . $property . 'StartAngle'] = 0;
             $defaults['Display' . $property . 'SweepAngle'] = 180;
             $defaults['Display' . $property . 'BorderWidth'] = 0;
@@ -285,7 +289,7 @@ class BBModuleKlima extends IPSModule
         [$background, $text, $low, $high] = self::COLOR_PALETTES[$palette];
         $properties = [
             'ColorPalette' => $palette,
-            'BackgroundColor' => hexdec($background),
+            'BackgroundColor' => $palette === 'symcon' ? -1 : hexdec($background),
             'BackgroundOpacity' => 100
         ];
         foreach (self::DISPLAY_ELEMENTS as [$property]) {
@@ -328,6 +332,10 @@ class BBModuleKlima extends IPSModule
                 'Display' . $property . 'Width' => $isArc
                     ? ($isSide ? 22 : 25)
                     : ($isSide ? 75 : 80),
+                'Display' . $property . 'Angle' => 0,
+                'Display' . $property . 'TextPosition' => $isArc
+                    ? 'inside'
+                    : ($isSide ? 'left' : 'above'),
                 'Position' . $property . 'X' => $positions[$index],
                 'Position' . $property . 'Y' => $yPositions[$index],
                 'Display' . $property . 'StartAngle' => 270,
@@ -454,6 +462,8 @@ class BBModuleKlima extends IPSModule
                 'x' => $this->ReadPropertyInteger('Position' . $property . 'X'),
                 'y' => $this->ReadPropertyInteger('Position' . $property . 'Y'),
                 'width' => $this->ReadPropertyInteger('Display' . $property . 'Width'),
+                'angle' => $this->ReadPropertyInteger('Display' . $property . 'Angle'),
+                'textPosition' => $this->ReadPropertyString('Display' . $property . 'TextPosition'),
                 'start' => $this->ReadPropertyInteger('Display' . $property . 'StartAngle'),
                 'sweep' => $this->ReadPropertyInteger('Display' . $property . 'SweepAngle'),
                 'textOffsetX' => $this->ReadPropertyInteger('Display' . $property . 'TextOffsetX'),

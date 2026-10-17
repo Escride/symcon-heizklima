@@ -12,6 +12,7 @@
            background: rgba(128,128,128,.28); }
     .bar.vertical { width: 2.5rem; height: 9rem; margin: auto; }
     .bar.arc { height: auto; aspect-ratio: 1; overflow: visible; background: transparent; }
+    .bar.arc { transform: none !important; }
     .fill { position: absolute; inset: 0; transform-origin: left center; clip-path: inset(0 100% 0 0); }
     .bar.vertical .fill { clip-path: inset(100% 0 0 0); }
     .arc-meter { display: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -26,6 +27,8 @@
                          gap: .1rem; padding: .25rem; text-align: center; }
     .bar.vertical .bar-text { flex-direction: column-reverse; justify-content: space-between; padding: .5rem .15rem; }
     .readout { display: inline-flex; align-items: baseline; justify-content: center; gap: .45em; white-space: nowrap; }
+    .readout.external { position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%);
+                        pointer-events: none; }
     .readout-value { font-weight: 600; font-variant-numeric: tabular-nums; }
     .element[data-key="permission"] .readout { flex-direction: column; align-items: center; gap: .15em; }
     .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
@@ -244,12 +247,18 @@
         const bar = $('bar-' + key);
         const readout = $('readout-' + key);
         const textOnly = element.shape === 'text';
-        readout.style.display = textOnly ? 'inline-flex' : 'none';
         bar.style.display = textOnly ? 'none' : '';
         const vertical = element.orientation === 'vertical';
         const arc = element.shape === 'arc';
+        const textPosition = element.textPosition || 'inside';
+        const externalText = !textOnly && !arc && textPosition !== 'inside';
         bar.classList.toggle('vertical', vertical && !arc);
         bar.classList.toggle('arc', arc);
+        const angle = clamp(isNum(element.angle) ? element.angle : 0, -90, 90);
+        bar.style.transform = arc ? '' : 'rotate(' + angle + 'deg)';
+        readout.classList.toggle('external', externalText);
+        readout.style.display = textOnly || externalText ? 'inline-flex' : 'none';
+        bar.querySelector('.bar-text').style.display = externalText ? 'none' : '';
         const width = clamp(element.width || 78, 10, 100);
         if (textOnly) {
             root.style.width = 'auto';
@@ -333,6 +342,49 @@
             text.style.left = text.style.top = text.style.right = text.style.bottom = '';
             text.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
         }
+        if (externalText) {
+            const barWidth = bar.offsetWidth;
+            const barHeight = bar.offsetHeight;
+            const axis = vertical
+                ? [-Math.sin(angle * Math.PI / 180), Math.cos(angle * Math.PI / 180)]
+                : [Math.cos(angle * Math.PI / 180), Math.sin(angle * Math.PI / 180)];
+            const normal = [-axis[1], axis[0]];
+            let direction;
+            let distance;
+            if (textPosition === 'above' || textPosition === 'below') {
+                const sign = textPosition === 'above' ? -1 : 1;
+                if (vertical) {
+                    direction = axis;
+                    distance = barHeight / 2 + 6;
+                } else {
+                    direction = normal;
+                    distance = barHeight / 2 + 6;
+                }
+                direction = [direction[0] * sign, direction[1] * sign];
+            } else {
+                if (vertical) {
+                    direction = normal;
+                    distance = barWidth / 2 + 6;
+                    const sign = textPosition === 'left' ? 1 : -1;
+                    direction = [direction[0] * sign, direction[1] * sign];
+                } else {
+                    direction = axis;
+                    distance = barWidth / 2 + 6;
+                    const sign = textPosition === 'left' ? -1 : 1;
+                    direction = [direction[0] * sign, direction[1] * sign];
+                }
+            }
+            readout.style.left = 'calc(50% + ' + (direction[0] * distance + offsetX) + 'px)';
+            readout.style.top = 'calc(50% + ' + (direction[1] * distance + offsetY) + 'px)';
+            const followsBar = textPosition === 'left' || textPosition === 'right';
+            const rotation = followsBar ? angle + (vertical ? 90 : 0) : 0;
+            const readableRotation = ((rotation + 90) % 180 + 180) % 180 - 90;
+            readout.style.transform = 'translate(-50%, -50%) rotate(' + readableRotation + 'deg)';
+        } else {
+            readout.style.left = '';
+            readout.style.top = '';
+            readout.style.transform = '';
+        }
         applyTextStyle($('bar-label-' + key), element.styles && element.styles.label);
         applyTextStyle($('bar-value-' + key), element.styles && element.styles.value);
         applyTextStyle($('readout-label-' + key), element.styles && element.styles.label);
@@ -395,9 +447,15 @@
                     ? clamp(distance / Math.abs(sweep), 0, 1)
                     : 0;
             } else if (element.orientation === 'vertical') {
-                fraction = clamp((rect.bottom - event.clientY) / rect.height, 0, 1);
+                const angle = clamp(isNum(element.angle) ? element.angle : 0, -90, 90) * Math.PI / 180;
+                const along = -Math.sin(angle) * (event.clientX - (rect.left + rect.width / 2)) +
+                    Math.cos(angle) * (event.clientY - (rect.top + rect.height / 2));
+                fraction = clamp((bar.offsetHeight / 2 - along) / bar.offsetHeight, 0, 1);
             } else {
-                fraction = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+                const angle = clamp(isNum(element.angle) ? element.angle : 0, -90, 90) * Math.PI / 180;
+                const along = Math.cos(angle) * (event.clientX - (rect.left + rect.width / 2)) +
+                    Math.sin(angle) * (event.clientY - (rect.top + rect.height / 2));
+                fraction = clamp((along + bar.offsetWidth / 2) / bar.offsetWidth, 0, 1);
             }
             const min = element.controlMin;
             const max = element.controlMax;

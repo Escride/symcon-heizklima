@@ -2,7 +2,7 @@
   "elements": [
     {
       "type": "ExpansionPanel",
-      "caption": "Kachelname",
+      "caption": "Kachel",
       "items": [
         {
           "type": "RowLayout",
@@ -41,6 +41,35 @@
             { "type": "SelectMedia", "name": "TextNameImage", "caption": "Bild hinter dem Text", "mediaType": 1 },
             { "type": "NumberSpinner", "name": "TextNameImageOpacity", "caption": "Bilddeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" }
           ]
+        },
+        { "type": "Label", "label": "KACHELHINTERGRUND" },
+        {
+          "type": "RowLayout",
+          "items": [
+            { "type": "SelectColor", "name": "BackgroundColor", "caption": "Hintergrundfarbe" },
+            { "type": "NumberSpinner", "name": "BackgroundOpacity", "caption": "Farbdeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" },
+            { "type": "SelectMedia", "name": "BackgroundImage", "caption": "Hintergrundbild", "mediaType": 1 },
+            { "type": "NumberSpinner", "name": "ImageOpacity", "caption": "Bilddeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" }
+          ]
+        },
+        {
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "Select",
+              "name": "ImagePosition",
+              "caption": "Bildposition",
+              "options": [
+                { "value": "full", "caption": "Fläche ausfüllen" },
+                { "value": "center", "caption": "Mitte" },
+                { "value": "top-left", "caption": "Oben links" },
+                { "value": "top-right", "caption": "Oben rechts" },
+                { "value": "bottom-left", "caption": "Unten links" },
+                { "value": "bottom-right", "caption": "Unten rechts" }
+              ]
+            },
+            { "type": "NumberSpinner", "name": "ImageSize", "caption": "Bildgröße", "minimum": 5, "maximum": 100, "suffix": "%" }
+          ]
         }
       ]
     },
@@ -78,6 +107,25 @@
               "options": [
                 { "value": "horizontal", "caption": "Waagerecht" },
                 { "value": "vertical", "caption": "Senkrecht" }
+              ]
+            },
+            { "type": "NumberSpinner", "name": "DisplayActualAngle", "caption": "Drehung / Schräge", "minimum": -90, "maximum": 90, "suffix": "°" }
+          ]
+        },
+        { "type": "Label", "label": "Balkenwinkel in Grad: 0° = gerade, negative oder positive Werte neigen den Balken." },
+        {
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "Select",
+              "name": "DisplayActualTextPosition",
+              "caption": "Textposition bei Balken",
+              "options": [
+                { "value": "inside", "caption": "Im Balken" },
+                { "value": "above", "caption": "Oberhalb (senkrecht: oben)" },
+                { "value": "below", "caption": "Unterhalb (senkrecht: unten)" },
+                { "value": "left", "caption": "Links am Balken (Text folgt der Schräge)" },
+                { "value": "right", "caption": "Rechts am Balken (Text folgt der Schräge)" }
               ]
             }
           ]
@@ -166,6 +214,25 @@
                 { "value": "horizontal", "caption": "Waagerecht" },
                 { "value": "vertical", "caption": "Senkrecht" }
               ]
+            },
+            { "type": "NumberSpinner", "name": "DisplayTargetAngle", "caption": "Drehung / Schräge", "minimum": -90, "maximum": 90, "suffix": "°" }
+          ]
+        },
+        { "type": "Label", "label": "Balkenwinkel in Grad: 0° = gerade, negative oder positive Werte neigen den Balken." },
+        {
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "Select",
+              "name": "DisplayTargetTextPosition",
+              "caption": "Textposition bei Balken",
+              "options": [
+                { "value": "inside", "caption": "Im Balken" },
+                { "value": "above", "caption": "Oberhalb (senkrecht: oben)" },
+                { "value": "below", "caption": "Unterhalb (senkrecht: unten)" },
+                { "value": "left", "caption": "Links am Balken (Text folgt der Schräge)" },
+                { "value": "right", "caption": "Rechts am Balken (Text folgt der Schräge)" }
+              ]
             }
           ]
         },
@@ -236,12 +303,7 @@
                 { "value": "bar", "caption": "Balken" },
                 { "value": "arc", "caption": "Gebogene Skala" }
               ]
-            }
-          ]
-        },
-        {
-          "type": "RowLayout",
-          "items": [
+            },
             {
               "type": "Select",
               "name": "DisplayOutputOrientation",
@@ -251,6 +313,30 @@
                 { "value": "vertical", "caption": "Senkrecht" }
               ]
             },
+            { "type": "NumberSpinner", "name": "DisplayOutputAngle", "caption": "Drehung / Schräge", "minimum": -90, "maximum": 90, "suffix": "°" }
+          ]
+        },
+        { "type": "Label", "label": "Balkenwinkel in Grad: 0° = gerade, negative oder positive Werte neigen den Balken." },
+        {
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "Select",
+              "name": "DisplayOutputTextPosition",
+              "caption": "Textposition bei Balken",
+              "options": [
+                { "value": "inside", "caption": "Im Balken" },
+                { "value": "above", "caption": "Oberhalb (senkrecht: oben)" },
+                { "value": "below", "caption": "Unterhalb (senkrecht: unten)" },
+                { "value": "left", "caption": "Links am Balken (Text folgt der Schräge)" },
+                { "value": "right", "caption": "Rechts am Balken (Text folgt der Schräge)" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "RowLayout",
+          "items": [
             { "type": "NumberSpinner", "name": "DisplayOutputStartAngle", "caption": "Skalenstart", "minimum": 0, "maximum": 359, "suffix": "°" },
             { "type": "NumberSpinner", "name": "DisplayOutputSweepAngle", "caption": "Skalenwinkel", "minimum": -359, "maximum": 359, "suffix": "°" }
           ]
@@ -315,12 +401,7 @@
                 { "value": "bar", "caption": "Balken" },
                 { "value": "arc", "caption": "Gebogene Skala" }
               ]
-            }
-          ]
-        },
-        {
-          "type": "RowLayout",
-          "items": [
+            },
             {
               "type": "Select",
               "name": "DisplayExtraOrientation",
@@ -330,6 +411,30 @@
                 { "value": "vertical", "caption": "Senkrecht" }
               ]
             },
+            { "type": "NumberSpinner", "name": "DisplayExtraAngle", "caption": "Drehung / Schräge", "minimum": -90, "maximum": 90, "suffix": "°" }
+          ]
+        },
+        { "type": "Label", "label": "Balkenwinkel in Grad: 0° = gerade, negative oder positive Werte neigen den Balken." },
+        {
+          "type": "RowLayout",
+          "items": [
+            {
+              "type": "Select",
+              "name": "DisplayExtraTextPosition",
+              "caption": "Textposition bei Balken",
+              "options": [
+                { "value": "inside", "caption": "Im Balken" },
+                { "value": "above", "caption": "Oberhalb (senkrecht: oben)" },
+                { "value": "below", "caption": "Unterhalb (senkrecht: unten)" },
+                { "value": "left", "caption": "Links am Balken (Text folgt der Schräge)" },
+                { "value": "right", "caption": "Rechts am Balken (Text folgt der Schräge)" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "RowLayout",
+          "items": [
             { "type": "NumberSpinner", "name": "DisplayExtraStartAngle", "caption": "Skalenstart", "minimum": 0, "maximum": 359, "suffix": "°" },
             { "type": "NumberSpinner", "name": "DisplayExtraSweepAngle", "caption": "Skalenwinkel", "minimum": -359, "maximum": 359, "suffix": "°" }
           ]
@@ -398,40 +503,6 @@
             { "type": "SelectColor", "name": "TextPermissionBorderColor", "caption": "Textrahmenfarbe" },
             { "type": "SelectMedia", "name": "TextPermissionImage", "caption": "Bild hinter dem Text", "mediaType": 1 },
             { "type": "NumberSpinner", "name": "TextPermissionImageOpacity", "caption": "Bilddeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "ExpansionPanel",
-      "caption": "Hintergrund",
-      "items": [
-        {
-          "type": "RowLayout",
-          "items": [
-            { "type": "SelectColor", "name": "BackgroundColor", "caption": "Hintergrundfarbe" },
-            { "type": "NumberSpinner", "name": "BackgroundOpacity", "caption": "Farbdeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" },
-            { "type": "SelectMedia", "name": "BackgroundImage", "caption": "Hintergrundbild", "mediaType": 1 },
-            { "type": "NumberSpinner", "name": "ImageOpacity", "caption": "Bilddeckkraft", "minimum": 0, "maximum": 100, "suffix": "%" }
-          ]
-        },
-        {
-          "type": "RowLayout",
-          "items": [
-            {
-              "type": "Select",
-              "name": "ImagePosition",
-              "caption": "Bildposition",
-              "options": [
-                { "value": "full", "caption": "Fläche ausfüllen" },
-                { "value": "center", "caption": "Mitte" },
-                { "value": "top-left", "caption": "Oben links" },
-                { "value": "top-right", "caption": "Oben rechts" },
-                { "value": "bottom-left", "caption": "Unten links" },
-                { "value": "bottom-right", "caption": "Unten rechts" }
-              ]
-            },
-            { "type": "NumberSpinner", "name": "ImageSize", "caption": "Bildgröße", "minimum": 5, "maximum": 100, "suffix": "%" }
           ]
         }
       ]
