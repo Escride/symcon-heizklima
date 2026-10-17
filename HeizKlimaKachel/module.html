@@ -185,24 +185,31 @@
 
     function applyNamePosition() {
         const el = $('name');
+        const x = isNum(cfg.nameOffsetX) ? cfg.nameOffsetX : 0;
+        const y = isNum(cfg.nameOffsetY) ? cfg.nameOffsetY : 0;
         el.style.top = el.style.right = el.style.bottom = el.style.left = '';
         el.style.transform = '';
         switch (cfg.namePosition) {
             case 'top-right':
-                el.style.top = el.style.right = '12px';
+                el.style.top = 'calc(40px + ' + y + 'px)';
+                el.style.right = 'calc(12px - ' + x + 'px)';
                 break;
             case 'bottom-left':
-                el.style.bottom = el.style.left = '12px';
+                el.style.bottom = 'calc(12px - ' + y + 'px)';
+                el.style.left = 'calc(12px + ' + x + 'px)';
                 break;
             case 'bottom-right':
-                el.style.bottom = el.style.right = '12px';
+                el.style.bottom = 'calc(12px - ' + y + 'px)';
+                el.style.right = 'calc(12px - ' + x + 'px)';
                 break;
             case 'center':
-                el.style.top = el.style.left = '50%';
+                el.style.top = 'calc(50% + ' + y + 'px)';
+                el.style.left = 'calc(50% + ' + x + 'px)';
                 el.style.transform = 'translate(-50%,-50%)';
                 break;
             default:
-                el.style.top = el.style.left = '12px';
+                el.style.top = 'calc(40px + ' + y + 'px)';
+                el.style.left = 'calc(12px + ' + x + 'px)';
         }
     }
 

@@ -48,9 +48,11 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyString('LabelCO2', 'CO₂');
         $this->RegisterPropertyString('LabelVent', 'Lüftung');
         $this->RegisterPropertyString('NamePosition', 'top-left');
+        $this->RegisterPropertyInteger('NameOffsetX', 0);
+        $this->RegisterPropertyInteger('NameOffsetY', 0);
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
-            $this->RegisterPropertyInteger('Text' . $property . 'Color', -1);
+            $this->RegisterPropertyInteger('Text' . $property . 'Color', hexdec('FFFFFF'));
             $this->RegisterPropertyString('Text' . $property . 'Font', '');
             $this->RegisterPropertyInteger('Text' . $property . 'Size', $fontSize);
             $this->RegisterPropertyInteger('Text' . $property . 'BackgroundColor', -1);
@@ -181,11 +183,10 @@ class HeizungKlimaKachel extends IPSModule
 
         $textStyles = [];
         foreach (self::TEXT_ELEMENTS as $key => [$property]) {
-            $fallbackColor = in_array($key, ['name', 'season'], true) ? $this->Col('TextColor', null) : null;
             $textStyles[$key] = [
-                'color'            => $this->Col('Text' . $property . 'Color', $fallbackColor),
-                'fontFamily'       => $this->ReadPropertyString('Text' . $property . 'Font'),
-                'fontSize'         => $this->ReadPropertyInteger('Text' . $property . 'Size'),
+                'color'           => $this->TextCol('Text' . $property . 'Color'),
+                'fontFamily'      => $this->ReadPropertyString('Text' . $property . 'Font'),
+                'fontSize'        => $this->ReadPropertyInteger('Text' . $property . 'Size'),
                 'backgroundColor' => $this->Col('Text' . $property . 'BackgroundColor', null),
                 'borderWidth'      => $this->ReadPropertyInteger('Text' . $property . 'BorderWidth'),
                 'borderColor'      => $this->Col('Text' . $property . 'BorderColor', null),
@@ -200,6 +201,8 @@ class HeizungKlimaKachel extends IPSModule
             'config' => [
                 'name'         => $this->ReadPropertyString('Name'),
                 'namePosition' => $this->ReadPropertyString('NamePosition'),
+                'nameOffsetX'  => $this->ReadPropertyInteger('NameOffsetX'),
+                'nameOffsetY'  => $this->ReadPropertyInteger('NameOffsetY'),
                 'textStyles'   => $textStyles,
                 'labels'       => [
                     'actual' => $this->ReadPropertyString('LabelActual'),
@@ -236,6 +239,12 @@ class HeizungKlimaKachel extends IPSModule
     {
         $c = $this->ReadPropertyInteger($property);
         return ($c < 0) ? $fallback : sprintf('#%06X', $c);
+    }
+
+    private function TextCol(string $property): string
+    {
+        $color = $this->ReadPropertyInteger($property);
+        return ($color < 0) ? 'transparent' : sprintf('#%06X', $color);
     }
 
     private function GetImage(): array
