@@ -20,13 +20,14 @@
     .arc-progress { stroke-linecap: round; }
     .bar.arc .arc-meter { display: block; }
     .bar.arc .fill { display: none; }
-    .bar-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+    .bar-text { position: absolute; z-index: 2; inset: 0; display: flex; align-items: center; justify-content: space-between;
                 gap: .5rem; padding: 0 .75rem; color: #000; font-size: .875rem; pointer-events: none; }
-    .bar.arc .bar-text { flex-direction: column; justify-content: center; gap: .1rem; padding: .5rem; text-align: center; }
+    .bar.arc .bar-text { inset: auto; width: 84%; flex-direction: column; justify-content: center;
+                         gap: .1rem; padding: .25rem; text-align: center; }
     .bar.vertical .bar-text { flex-direction: column-reverse; justify-content: space-between; padding: .5rem .15rem; }
-    .element-value { font-weight: 600; font-variant-numeric: tabular-nums; }
-    .season-value { display: inline-block; padding: .2em .45em; border-radius: .35em; }
-    .vent-status { margin-top: .2rem; font-size: .75rem; text-align: center; }
+    .readout { display: inline-flex; align-items: baseline; justify-content: center; gap: .45em; white-space: nowrap; }
+    .readout-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+    .element[data-key="permission"] .readout { flex-direction: column; align-items: center; gap: .15em; }
     .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
     .styled-text::before { content: ""; position: absolute; z-index: -2; inset: -2px -5px;
                            border: var(--text-border-width, 0px) solid var(--text-border-color, transparent);
@@ -158,13 +159,19 @@
         root.className = 'element' + (element.target ? ' target' : '');
         root.id = 'element-' + key;
         root.dataset.key = key;
-        const season = key === 'season';
-        if (season) {
-            const label = document.createElement('span');
-            label.className = 'season-value';
-            label.id = 'value-' + key;
-            root.appendChild(label);
-        } else {
+        const readout = document.createElement('div');
+        readout.className = 'readout styled-text';
+        readout.id = 'readout-' + key;
+        const readoutLabel = document.createElement('span');
+        readoutLabel.className = 'readout-label';
+        readoutLabel.id = 'readout-label-' + key;
+        const readoutValue = document.createElement('span');
+        readoutValue.className = 'readout-value';
+        readoutValue.id = 'readout-value-' + key;
+        readout.append(readoutLabel, readoutValue);
+        root.appendChild(readout);
+
+        if (key !== 'permission') {
             const bar = document.createElement('div');
             bar.className = 'bar';
             bar.id = 'bar-' + key;
@@ -202,19 +209,13 @@
             text.className = 'bar-text';
             const label = document.createElement('span');
             label.className = 'element-label';
-            label.id = 'label-' + key;
+            label.id = 'bar-label-' + key;
             const value = document.createElement('span');
             value.className = 'element-value';
-            value.id = 'value-' + key;
+            value.id = 'bar-value-' + key;
             text.append(label, value);
             bar.append(fill, svg, thumb, text);
             root.appendChild(bar);
-            if (key === 'ventActual') {
-                const status = document.createElement('div');
-                status.className = 'vent-status';
-                status.id = 'vent-status';
-                root.appendChild(status);
-            }
         }
         $('elements').appendChild(root);
         elementsByKey[key] = root;
@@ -241,12 +242,20 @@
     function renderBar(key, element, value, showLabel) {
         const root = elementsByKey[key];
         const bar = $('bar-' + key);
+        const readout = $('readout-' + key);
+        const textOnly = element.shape === 'text' || (!element.target && element.shape === 'straight');
+        readout.style.display = textOnly ? 'inline-flex' : 'none';
+        bar.style.display = textOnly ? 'none' : '';
         const vertical = element.orientation === 'vertical';
         const arc = element.shape === 'arc';
         bar.classList.toggle('vertical', vertical && !arc);
         bar.classList.toggle('arc', arc);
         const width = clamp(element.width || 78, 10, 100);
-        if (vertical && !arc) {
+        if (textOnly) {
+            root.style.width = 'auto';
+            root.style.height = 'auto';
+            bar.style.height = '';
+        } else if (vertical && !arc) {
             root.style.width = '2.5rem';
             root.style.height = width + '%';
             bar.style.height = '100%';
@@ -293,7 +302,7 @@
         arcFill.style.strokeDasharray = '100 100';
         arcFill.style.strokeDashoffset = String(100 - percent);
         const thumb = $('thumb-' + key);
-        if (arc) {
+        if (arc || !element.target) {
             thumb.style.display = 'none';
         } else if (vertical) {
             thumb.style.display = '';
@@ -302,15 +311,32 @@
             thumb.style.display = '';
             thumb.style.left = 'calc(' + percent + '% - ' + (percent * .06) + 'px)';
         }
-        const label = $('label-' + key);
-        label.textContent = showLabel ? element.label : '';
-        $('value-' + key).textContent = showValue(value);
+        const labelText = showLabel ? element.label : '';
+        const valueText = showValue(value);
+        $('bar-label-' + key).textContent = labelText;
+        $('bar-value-' + key).textContent = valueText;
+        $('readout-label-' + key).textContent = labelText;
+        $('readout-value-' + key).textContent = valueText;
         const text = bar.querySelector('.bar-text');
-        text.style.transform = 'translate(' +
-            (isNum(element.textOffsetX) ? element.textOffsetX : 0) + 'px, ' +
-            (isNum(element.textOffsetY) ? element.textOffsetY : 0) + 'px)';
-        applyTextStyle(label, element.styles && element.styles.label);
-        applyTextStyle($('value-' + key), element.styles && element.styles.value);
+        const offsetX = isNum(element.textOffsetX) ? element.textOffsetX : 0;
+        const offsetY = isNum(element.textOffsetY) ? element.textOffsetY : 0;
+        if (arc) {
+            const middleAngle = (start + sweep / 2) * Math.PI / 180;
+            const textX = 50 + 20 * Math.sin(middleAngle);
+            const textY = 50 - 20 * Math.cos(middleAngle);
+            text.style.left = textX + '%';
+            text.style.top = textY + '%';
+            text.style.right = text.style.bottom = 'auto';
+            text.style.transform = 'translate(calc(-50% + ' + offsetX + 'px), calc(-50% + ' +
+                offsetY + 'px))';
+        } else {
+            text.style.left = text.style.top = text.style.right = text.style.bottom = '';
+            text.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
+        }
+        applyTextStyle($('bar-label-' + key), element.styles && element.styles.label);
+        applyTextStyle($('bar-value-' + key), element.styles && element.styles.value);
+        applyTextStyle($('readout-label-' + key), element.styles && element.styles.label);
+        applyTextStyle($('readout-value-' + key), element.styles && element.styles.value);
     }
 
     function renderElement(key, element) {
@@ -320,36 +346,31 @@
         root.style.left = clamp(element.x, 0, 100) + '%';
         root.style.top = clamp(element.y, 0, 100) + '%';
         if (!element.available) return;
-        if (key === 'season') {
-            let winter = !!vals.season;
-            if (cfg.seasonInvert) winter = !winter;
-            const seasonText = vals.season === null || vals.season === undefined
-                ? '' : (winter ? '❄ Winter' : '☀ Sommer');
-            const label = $('value-season');
-            label.textContent = seasonText;
-            label.style.transform = 'translate(' +
+        if (key === 'permission') {
+            const status = vals.permission ? 'Freigegeben' : 'Gesperrt';
+            $('readout-label-permission').textContent = element.label || '';
+            $('readout-value-permission').textContent = status;
+            $('readout-permission').style.transform = 'translate(' +
                 (isNum(element.textOffsetX) ? element.textOffsetX : 0) + 'px, ' +
                 (isNum(element.textOffsetY) ? element.textOffsetY : 0) + 'px)';
-            applyTextStyle(label, element.styles && element.styles.label);
-            root.style.width = 'auto';
+            applyTextStyle($('readout-label-permission'), element.styles && element.styles.label);
+            applyTextStyle($('readout-value-permission'), element.styles && element.styles.value);
             return;
         }
-        root.classList.toggle('disabled', element.target &&
-            (!element.controllable || (element.permissionKey && !vals[element.permissionKey])));
+        root.style.width = element.shape === 'text' ? 'auto' : '';
+        root.style.height = '';
+        root.classList.toggle('disabled', element.target && (
+            !element.controllable || (element.permissionKey && !vals[element.permissionKey]) ||
+            element.shape === 'text'));
         const value = activeDrag && activeDrag.key === key ? activeDrag.value : vals[element.valueKey];
         renderBar(key, element, value, true);
-        if (key === 'ventActual' && $('vent-status')) {
-            const hasStatusVariable = vals.ventActive !== null && vals.ventActive !== undefined;
-            const active = hasStatusVariable ? !!vals.ventActive : (isNum(vals.ventActual) && vals.ventActual > 0);
-            $('vent-status').textContent = hasStatusVariable ? (active ? 'Anlage aktiv' : 'Anlage aus') : '';
-        }
     }
 
     function configureTarget(key, element) {
         if (!element.target) return;
         const bar = $('bar-' + key);
         const root = elementsByKey[key];
-        const canControl = element.controllable &&
+        const canControl = element.controllable && element.shape !== 'text' &&
             (!element.permissionKey || vals[element.permissionKey] === true);
         if (!canControl || !element.available) {
             root.classList.add('disabled');

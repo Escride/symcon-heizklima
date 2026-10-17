@@ -5,83 +5,26 @@ declare(strict_types=1);
 class HeizungKlimaKachel extends IPSModule
 {
     private const TEXT_ELEMENTS = [
-        'name'        => ['Name', 1.125],
-        'season'      => ['Season', 0.9],
-        'actual'      => ['Actual', 0.875],
-        'target'      => ['Target', 0.875],
-        'heat'        => ['Heat', 0.875],
-        'vent'        => ['Vent', 0.875],
-        'ventTarget'  => ['VentTarget', 0.875],
-        'co2'         => ['CO2', 0.875],
-        'cool'        => ['Cool', 0.875],
-        'climateTarget' => ['ClimateTarget', 0.875],
-        'fan'         => ['Fan', 0.875],
-        'fanTarget'   => ['FanTarget', 0.875]
+        'name'       => ['Name', 1.125],
+        'actual'     => ['Actual', 0.875],
+        'target'     => ['Target', 0.875],
+        'output'     => ['Output', 0.875],
+        'extra'      => ['Extra', 0.875],
+        'permission' => ['Permission', 0.875]
     ];
 
-    // Schlüssel in der Kachel => Name der Eigenschaft (Variable)
     private const VARS = [
-        'season'        => 'SeasonVar',
-        'actual'        => 'ActualVar',
-        'target'        => 'TargetVar',
-        'valveActual'   => 'HeatPowerVar',
-        'ventActive'    => 'VentActiveVar',
-        'ventActual'    => 'VentPowerVar',
-        'ventTarget'    => 'VentTargetVar',
-        'co2'           => 'CO2Var',
-        'climateActual' => 'CoolPowerVar',
-        'climateTarget' => 'CoolTargetVar',
-        'fanActual'     => 'CoolFanVar',
-        'fanTarget'     => 'CoolFanTargetVar'
-    ];
-
-    private const PERMISSIONS = [
-        'room'    => 'RoomPermissionVar',
-        'vent'    => 'VentPermissionVar',
-        'climate' => 'ClimatePermissionVar',
-        'fan'     => 'FanPermissionVar'
-    ];
-
-    private const TARGET_CONTROLLERS = [
-        'target'        => 'room',
-        'ventTarget'    => 'vent',
-        'climateTarget' => 'climate',
-        'fanTarget'     => 'fan'
+        'actual' => 'ActualVar',
+        'target' => 'TargetVar',
+        'output' => 'OutputVar',
+        'extra'  => 'ExtraVar'
     ];
 
     private const DISPLAY_ELEMENTS = [
-        'season'        => ['Season', 'Saison', 'Season', 'season', false, 'TextSeason'],
-        'actual'        => ['Actual', 'Istwert', 'Room', 'actual', false, 'TextActual'],
-        'target'        => ['Target', 'Sollwert', 'RoomTarget', 'target', true, 'TextTarget'],
-        'valveActual'   => ['ValveActual', 'Ventilstellung', 'Valve', 'valveActual', false, 'TextHeat'],
-        'ventActual'    => ['VentActual', 'Lüftung Istwert', 'Vent', 'ventActual', false, 'TextVent'],
-        'ventTarget'    => ['VentTarget', 'Lüftung Sollwert', 'VentTarget', 'ventTarget', true, 'TextVentTarget'],
-        'co2'           => ['CO2', 'CO₂', 'CO2', 'co2', false, 'TextCO2'],
-        'climateActual' => ['ClimateActual', 'Kühlung Istwert', 'Climate', 'climateActual', false, 'TextCool'],
-        'climateTarget' => ['ClimateTarget', 'Kühlung Sollwert', 'ClimateTarget', 'climateTarget', true, 'TextClimateTarget'],
-        'fanActual'     => ['FanActual', 'Lüfterstufe Istwert', 'Fan', 'fanActual', false, 'TextFan'],
-        'fanTarget'     => ['FanTarget', 'Lüfterstufe Sollwert', 'FanTarget', 'fanTarget', true, 'TextFanTarget']
-    ];
-
-    private const CHANNEL_DEFAULTS = [
-        'Season'  => [0.0, 1.0, 0.5],
-        'Room'    => [15.0, 30.0, 22.5],
-        'RoomTarget' => [5.0, 35.0, 20.0],
-        'Valve'   => [0.0, 100.0, 50.0],
-        'Vent'    => [0.0, 100.0, 50.0],
-        'VentTarget' => [0.0, 100.0, 50.0],
-        'CO2'     => [400.0, 2000.0, 1200.0],
-        'Climate' => [15.0, 35.0, 25.0],
-        'ClimateTarget' => [15.0, 35.0, 25.0],
-        'Fan'     => [0.0, 7.0, 3.5],
-        'FanTarget' => [0.0, 7.0, 3.5]
-    ];
-
-    private const CONTROL_DEFAULTS = [
-        'room'    => [5.0, 35.0, 0.5],
-        'vent'    => [0.0, 100.0, 1.0],
-        'climate' => [15.0, 35.0, 0.5],
-        'fan'     => [0.0, 7.0, 1.0]
+        'actual' => ['Actual', 'Istwert', 'Target', 'actual', false, 'TextActual'],
+        'target' => ['Target', 'Sollwert', 'Target', 'target', true, 'TextTarget'],
+        'output' => ['Output', 'Stellwert / Leistung', 'Output', 'output', false, 'TextOutput'],
+        'extra'  => ['Extra', 'Zusatzwert', 'Extra', 'extra', false, 'TextExtra']
     ];
 
     private const COLOR_PALETTES = [
@@ -110,15 +53,14 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyInteger('NameOffsetY', 0);
 
         $defaultPositions = [
-            'season' => [50, 8], 'actual' => [50, 20], 'target' => [50, 29],
-            'valveActual' => [50, 38], 'ventActual' => [50, 47],
-            'ventTarget' => [50, 56], 'co2' => [50, 65],
-            'climateActual' => [50, 74], 'climateTarget' => [50, 82],
-            'fanActual' => [50, 90], 'fanTarget' => [50, 96]
+            'actual' => [50, 35],
+            'target' => [50, 55],
+            'output' => [50, 72],
+            'extra'  => [50, 88]
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $position = $defaultPositions[$key];
-            $this->RegisterPropertyString('Display' . $property . 'Shape', 'straight');
+            $this->RegisterPropertyString('Display' . $property . 'Shape', $key === 'target' ? 'bar' : 'text');
             $this->RegisterPropertyString('Display' . $property . 'Orientation', 'horizontal');
             $this->RegisterPropertyInteger('Position' . $property . 'X', $position[0]);
             $this->RegisterPropertyInteger('Position' . $property . 'Y', $position[1]);
@@ -130,19 +72,23 @@ class HeizungKlimaKachel extends IPSModule
             $this->RegisterPropertyInteger('Display' . $property . 'TextOffsetX', 0);
             $this->RegisterPropertyInteger('Display' . $property . 'TextOffsetY', 0);
         }
-        foreach (self::CHANNEL_DEFAULTS as $channel => [$min, $max, $mid]) {
-            $this->RegisterPropertyFloat('Range' . $channel . 'Min', $min);
-            $this->RegisterPropertyFloat('Range' . $channel . 'Max', $max);
-            $this->RegisterPropertyFloat('Range' . $channel . 'Mid', $mid);
+        $this->RegisterPropertyFloat('RoomControlMin', 5.0);
+        $this->RegisterPropertyFloat('RoomControlMax', 35.0);
+        $this->RegisterPropertyFloat('RoomControlStep', 0.5);
+        $this->RegisterPropertyBoolean('RoomControlEnabled', true);
+        $this->RegisterPropertyInteger('RoomPermissionVar', 0);
+        $this->RegisterPropertyInteger('PermissionVar', 0);
+        $this->RegisterPropertyString('LabelPermission', 'Freigabe');
+        $this->RegisterPropertyInteger('PositionPermissionX', 88);
+        $this->RegisterPropertyInteger('PositionPermissionY', 8);
+        $this->RegisterPropertyInteger('DisplayPermissionTextOffsetX', 0);
+        $this->RegisterPropertyInteger('DisplayPermissionTextOffsetY', 0);
+        foreach (['Output' => [0.0, 100.0, 50.0], 'Extra' => [0.0, 100.0, 50.0]] as $slot => [$min, $max, $mid]) {
+            $this->RegisterPropertyFloat('Range' . $slot . 'Min', $min);
+            $this->RegisterPropertyFloat('Range' . $slot . 'Max', $max);
+            $this->RegisterPropertyFloat('Range' . $slot . 'Mid', $mid);
         }
-        foreach (self::PERMISSIONS as $permission => $property) {
-            [$controlMin, $controlMax, $controlStep] = self::CONTROL_DEFAULTS[$permission];
-            $this->RegisterPropertyInteger($property, 0);
-            $this->RegisterPropertyBoolean(ucfirst($permission) . 'ControlEnabled', true);
-            $this->RegisterPropertyFloat(ucfirst($permission) . 'ControlMin', $controlMin);
-            $this->RegisterPropertyFloat(ucfirst($permission) . 'ControlMax', $controlMax);
-            $this->RegisterPropertyFloat(ucfirst($permission) . 'ControlStep', $controlStep);
-        }
+        $this->RegisterPropertyFloat('RangeRoomTargetMid', 20.0);
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
             $this->RegisterPropertyInteger('Text' . $property . 'Color', 0);
@@ -161,20 +107,9 @@ class HeizungKlimaKachel extends IPSModule
         }
 
         // Optionen
-        $this->RegisterPropertyBoolean('SeasonInvert', false);
-        $this->RegisterPropertyBoolean('HeatInvert', false);
-        $this->RegisterPropertyBoolean('CoolInvert', false);
-        $this->RegisterPropertyBoolean('FanInvert', false);
-
-        // Farben (-1 = transparent / Standard)
-        $this->RegisterPropertyInteger('ColorCold', hexdec('3B82F6'));
-        $this->RegisterPropertyInteger('ColorWarm', hexdec('F97316'));
-        $this->RegisterPropertyInteger('ColorVent', hexdec('14B8A6'));
-        $this->RegisterPropertyInteger('TextColor', -1);
-        foreach (self::DISPLAY_ELEMENTS as [$property, $_label, $channel]) {
-            [$lowColor, $highColor] = $this->GetDisplayColorDefaults($channel);
-            $this->RegisterPropertyInteger('Color' . $property . 'Low', $lowColor);
-            $this->RegisterPropertyInteger('Color' . $property . 'High', $highColor);
+        foreach (self::DISPLAY_ELEMENTS as [$property]) {
+            $this->RegisterPropertyInteger('Color' . $property . 'Low', hexdec('3B82F6'));
+            $this->RegisterPropertyInteger('Color' . $property . 'High', hexdec('F97316'));
         }
 
         // Hintergrund
@@ -186,8 +121,8 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyInteger('ImageOpacity', 40);
         $this->RegisterPropertyString('ColorPalette', 'symcon');
 
-        foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
-            $this->RegisterPropertyString('Label' . $property, self::DISPLAY_ELEMENTS[$key][1]);
+        foreach (self::DISPLAY_ELEMENTS as $key => [$property, $label]) {
+            $this->RegisterPropertyString('Label' . $property, $label);
         }
 
         // Diese Instanz ist eine Kachel-Visualisierung
@@ -212,11 +147,12 @@ class HeizungKlimaKachel extends IPSModule
                 $this->RegisterMessage($id, VM_UPDATE);
             }
         }
-        foreach (self::PERMISSIONS as $prop) {
-            $id = $this->ReadPropertyInteger($prop);
-            if ($id > 0 && IPS_VariableExists($id)) {
-                $this->RegisterMessage($id, VM_UPDATE);
-            }
+        $permissionID = $this->ReadPropertyInteger('PermissionVar');
+        if ($permissionID <= 0) {
+            $permissionID = $this->ReadPropertyInteger('RoomPermissionVar');
+        }
+        if ($permissionID > 0 && IPS_VariableExists($permissionID)) {
+            $this->RegisterMessage($permissionID, VM_UPDATE);
         }
 
         $this->UpdateVisualizationValue(json_encode($this->GetFullMessage(), JSON_HEX_TAG));
@@ -272,17 +208,17 @@ class HeizungKlimaKachel extends IPSModule
             'NamePosition'     => 'top-left',
             'NameOffsetX'      => 0,
             'NameOffsetY'      => 0,
-            'ColorCold'        => hexdec('3B82F6'),
-            'ColorWarm'        => hexdec('F97316'),
-            'ColorVent'        => hexdec('14B8A6'),
-            'TextColor'        => -1,
             'BackgroundColor'  => -1,
             'BackgroundOpacity' => 100,
             'BackgroundImage'  => 0,
             'ImagePosition'    => 'full',
             'ImageSize'        => 50,
             'ImageOpacity'     => 40,
-            'ColorPalette'     => 'symcon'
+            'ColorPalette'     => 'symcon',
+            'PositionPermissionX' => 88,
+            'PositionPermissionY' => 8,
+            'DisplayPermissionTextOffsetX' => 0,
+            'DisplayPermissionTextOffsetY' => 0
         ];
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
@@ -295,21 +231,17 @@ class HeizungKlimaKachel extends IPSModule
             $defaults['Text' . $property . 'Image'] = 0;
             $defaults['Text' . $property . 'ImageOpacity'] = 100;
         }
-        foreach (self::DISPLAY_ELEMENTS as [$property, $_label, $channel]) {
-            [$lowColor, $highColor] = $this->GetDisplayColorDefaults($channel);
-            $defaults['Color' . $property . 'Low'] = $lowColor;
-            $defaults['Color' . $property . 'High'] = $highColor;
+        foreach (self::DISPLAY_ELEMENTS as [$property]) {
+            $defaults['Color' . $property . 'Low'] = hexdec('3B82F6');
+            $defaults['Color' . $property . 'High'] = hexdec('F97316');
         }
 
         $defaultPositions = [
-            'season' => [50, 8], 'actual' => [50, 20], 'target' => [50, 29],
-            'valveActual' => [50, 38], 'ventActual' => [50, 47],
-            'ventTarget' => [50, 56], 'co2' => [50, 65],
-            'climateActual' => [50, 74], 'climateTarget' => [50, 82],
-            'fanActual' => [50, 90], 'fanTarget' => [50, 96]
+            'actual' => [50, 35], 'target' => [50, 55],
+            'output' => [50, 72], 'extra' => [50, 88]
         ];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
-            $defaults['Display' . $property . 'Shape'] = 'straight';
+            $defaults['Display' . $property . 'Shape'] = $key === 'target' ? 'bar' : 'text';
             $defaults['Display' . $property . 'Orientation'] = 'horizontal';
             $defaults['Position' . $property . 'X'] = $defaultPositions[$key][0];
             $defaults['Position' . $property . 'Y'] = $defaultPositions[$key][1];
@@ -321,7 +253,6 @@ class HeizungKlimaKachel extends IPSModule
             $defaults['Display' . $property . 'TextOffsetX'] = 0;
             $defaults['Display' . $property . 'TextOffsetY'] = 0;
         }
-
         foreach ($defaults as $property => $value) {
             if (!IPS_SetProperty($this->InstanceID, $property, (string) $value)) {
                 throw new RuntimeException('Could not reset appearance property: ' . $property);
@@ -369,42 +300,29 @@ class HeizungKlimaKachel extends IPSModule
 
     private function ApplyLayoutPreset(string $arguments): void
     {
-        $parts = explode(':', $arguments, 2);
-        if (count($parts) !== 2) {
-            throw new InvalidArgumentException('Layout preset must specify a group and layout.');
-        }
-        [$group, $layout] = $parts;
-        $groups = [
-            'room' => ['actual', 'target', 'valveActual'],
-            'vent' => ['ventActual', 'ventTarget', 'co2'],
-            'climate' => ['climateActual', 'climateTarget', 'fanActual', 'fanTarget']
-        ];
-        if (!isset($groups[$group]) || !in_array($layout, ['bars', 'arcs-stacked', 'arcs-side'], true)) {
+        $layouts = ['bars-stacked', 'bars-side', 'arcs-stacked', 'arcs-side'];
+        if (!in_array($arguments, $layouts, true)) {
             throw new InvalidArgumentException('Unknown layout preset: ' . $arguments);
         }
-        $keys = $groups[$group];
-        $count = count($keys);
-        if ($layout === 'arcs-side') {
-            $positions = $count === 3 ? [17, 50, 83] : [13, 38, 62, 87];
-            $width = $count === 3 ? 28 : 23;
+        $keys = array_keys(self::DISPLAY_ELEMENTS);
+        if ($arguments === 'bars-side' || $arguments === 'arcs-side') {
+            $positions = [13, 38, 62, 87];
             $yPositions = array_fill(0, $count, 50);
-        } elseif ($layout === 'arcs-stacked') {
-            $positions = array_fill(0, $count, 50);
-            $yPositions = $count === 3 ? [26, 52, 78] : [16, 39, 62, 85];
-            $width = $count === 3 ? 42 : 36;
         } else {
             $positions = array_fill(0, $count, 50);
-            $yPositions = $count === 3 ? [26, 52, 78] : [16, 39, 62, 85];
-            $width = 78;
+            $yPositions = [15, 38, 62, 85];
         }
 
         foreach ($keys as $index => $key) {
             [$property] = self::DISPLAY_ELEMENTS[$key];
-            $isArc = $layout !== 'bars';
+            $isArc = strpos($arguments, 'arcs-') === 0;
+            $isSide = strpos($arguments, '-side') !== false;
             $settings = [
-                'Display' . $property . 'Shape' => $isArc ? 'arc' : 'straight',
-                'Display' . $property . 'Orientation' => 'horizontal',
-                'Display' . $property . 'Width' => $width,
+                'Display' . $property . 'Shape' => $isArc ? 'arc' : 'bar',
+                'Display' . $property . 'Orientation' => $isSide && !$isArc ? 'vertical' : 'horizontal',
+                'Display' . $property . 'Width' => $isArc
+                    ? ($isSide ? 22 : 25)
+                    : ($isSide ? 75 : 80),
                 'Position' . $property . 'X' => $positions[$index],
                 'Position' . $property . 'Y' => $yPositions[$index],
                 'Display' . $property . 'StartAngle' => 270,
@@ -428,33 +346,31 @@ class HeizungKlimaKachel extends IPSModule
         if (!is_finite($requestedValue)) {
             throw new InvalidArgumentException('Target values must be finite.');
         }
-        if (!isset(self::TARGET_CONTROLLERS[$key], self::VARS[$key])) {
+        if ($key !== 'target') {
             throw new InvalidArgumentException('Unknown target element: ' . $key);
         }
 
-        $permission = self::TARGET_CONTROLLERS[$key];
-        $prefix = ucfirst($permission);
-        if (!$this->ReadPropertyBoolean($prefix . 'ControlEnabled')) {
+        if (!$this->ReadPropertyBoolean('RoomControlEnabled')) {
             return;
         }
 
-        $permissionID = $this->ReadPropertyInteger(self::PERMISSIONS[$permission]);
+        $permissionID = $this->ReadPropertyInteger('PermissionVar');
+        if ($permissionID <= 0) {
+            $permissionID = $this->ReadPropertyInteger('RoomPermissionVar');
+        }
         if ($permissionID > 0 && !$this->IsPermissionGranted($permissionID)) {
             return;
         }
 
-        $min = $this->ReadPropertyFloat($prefix . 'ControlMin');
-        $max = $this->ReadPropertyFloat($prefix . 'ControlMax');
-        $step = $this->ReadPropertyFloat($prefix . 'ControlStep');
+        $min = $this->ReadPropertyFloat('RoomControlMin');
+        $max = $this->ReadPropertyFloat('RoomControlMax');
+        $step = $this->ReadPropertyFloat('RoomControlStep');
         if ($max <= $min || $step <= 0) {
-            throw new RuntimeException('Invalid control range configured for ' . $permission . '.');
+            throw new RuntimeException('Invalid target range or step configured.');
         }
         $value = max($min, min($max, $requestedValue));
         $value = $min + round(($value - $min) / $step) * $step;
         $value = max($min, min($max, $value));
-        if ($key === 'fanTarget' && $this->ReadPropertyBoolean('FanInvert')) {
-            $value = $min + $max - $value;
-        }
         $id = $this->ReadPropertyInteger(self::VARS[$key]);
         if ($id <= 0 || !IPS_VariableExists($id)) {
             throw new RuntimeException('The target variable for ' . $key . ' is not configured or does not exist.');
@@ -476,15 +392,14 @@ class HeizungKlimaKachel extends IPSModule
             $id = $this->ReadPropertyInteger($prop);
             $values[$key] = ($id > 0 && IPS_VariableExists($id)) ? GetValue($id) : null;
         }
-        if ($this->ReadPropertyBoolean('FanInvert') && is_numeric($values['fanTarget'])) {
-            $min = $this->ReadPropertyFloat('FanControlMin');
-            $max = $this->ReadPropertyFloat('FanControlMax');
-            $values['fanTarget'] = $min + $max - (float) $values['fanTarget'];
+        $permissionID = $this->ReadPropertyInteger('PermissionVar');
+        if ($permissionID <= 0) {
+            $permissionID = $this->ReadPropertyInteger('RoomPermissionVar');
         }
-        foreach (self::PERMISSIONS as $key => $prop) {
-            $id = $this->ReadPropertyInteger($prop);
-            $values[$key . 'Permission'] = ($id <= 0) || $this->IsPermissionGranted($id);
-        }
+        $values['permission'] = ($permissionID > 0 && IPS_VariableExists($permissionID))
+            ? $this->IsPermissionGranted($permissionID)
+            : null;
+        $values['permissionAllowed'] = $values['permission'] !== false;
         return $values;
     }
 
@@ -512,16 +427,23 @@ class HeizungKlimaKachel extends IPSModule
 
         $elements = [];
         foreach (self::DISPLAY_ELEMENTS as $key => [$property, $defaultLabel, $channel, $valueKey, $isTarget, $stylePrefix]) {
-            $rangeMin = $this->ReadPropertyFloat('Range' . $channel . 'Min');
-            $rangeMax = $this->ReadPropertyFloat('Range' . $channel . 'Max');
+            if ($key === 'actual' || $key === 'target') {
+                $rangeMin = $this->ReadPropertyFloat('RoomControlMin');
+                $rangeMax = $this->ReadPropertyFloat('RoomControlMax');
+                $mid = $this->ReadPropertyFloat('RangeRoomTargetMid');
+            } else {
+                $rangeMin = $this->ReadPropertyFloat('Range' . $channel . 'Min');
+                $rangeMax = $this->ReadPropertyFloat('Range' . $channel . 'Max');
+                $mid = $this->ReadPropertyFloat('Range' . $channel . 'Mid');
+            }
             $element = [
                 'label' => $this->ReadPropertyString('Label' . $property),
-                'available' => $key === 'season' ? $this->HasVariable('SeasonVar') : $this->HasVariable(self::VARS[$valueKey]),
+                'available' => $this->HasVariable(self::VARS[$valueKey]),
                 'valueKey' => $valueKey,
                 'target' => $isTarget,
                 'rangeMin' => $rangeMin,
                 'rangeMax' => $rangeMax,
-                'mid' => $this->ReadPropertyFloat('Range' . $channel . 'Mid'),
+                'mid' => $mid,
                 'shape' => $this->ReadPropertyString('Display' . $property . 'Shape'),
                 'orientation' => $this->ReadPropertyString('Display' . $property . 'Orientation'),
                 'x' => $this->ReadPropertyInteger('Position' . $property . 'X'),
@@ -533,35 +455,39 @@ class HeizungKlimaKachel extends IPSModule
                 'textOffsetY' => $this->ReadPropertyInteger('Display' . $property . 'TextOffsetY'),
                 'borderWidth' => $this->ReadPropertyInteger('Display' . $property . 'BorderWidth'),
                 'borderColor' => $this->Col('Display' . $property . 'BorderColor', null),
-                'styles' => $this->GetDisplayStyles($textStyles, $key, $stylePrefix),
+                'styles' => ['label' => $textStyles[$key], 'value' => $textStyles[$key]],
                 'lowColor' => $this->Col('Color' . $property . 'Low', '#3B82F6'),
                 'highColor' => $this->Col('Color' . $property . 'High', '#F97316'),
                 'step' => 1.0,
                 'controllable' => false,
-                'permissionKey' => null,
-                'invert' => $key === 'fanTarget' && $this->ReadPropertyBoolean('FanInvert')
+                'permissionKey' => null
             ];
 
             if ($isTarget) {
-                $permission = self::TARGET_CONTROLLERS[$key];
-                $prefix = ucfirst($permission);
-                $element['controlMin'] = $this->ReadPropertyFloat($prefix . 'ControlMin');
-                $element['controlMax'] = $this->ReadPropertyFloat($prefix . 'ControlMax');
-                $element['step'] = $this->ReadPropertyFloat($prefix . 'ControlStep');
-                $element['controllable'] = $this->ReadPropertyBoolean($prefix . 'ControlEnabled');
-                $element['permissionKey'] = $permission . 'Permission';
-                if ($key === 'fanTarget') {
-                    $ratio = $rangeMax > $rangeMin
-                        ? max(0.0, min(1.0, ($element['mid'] - $rangeMin) / ($rangeMax - $rangeMin)))
-                        : 0.5;
-                    $element['rangeMin'] = $element['controlMin'];
-                    $element['rangeMax'] = $element['controlMax'];
-                    $element['mid'] = $element['controlMin'] +
-                        $ratio * ($element['controlMax'] - $element['controlMin']);
-                }
+                $element['controlMin'] = $this->ReadPropertyFloat('RoomControlMin');
+                $element['controlMax'] = $this->ReadPropertyFloat('RoomControlMax');
+                $element['step'] = $this->ReadPropertyFloat('RoomControlStep');
+                $element['controllable'] = $this->ReadPropertyBoolean('RoomControlEnabled');
+                $element['permissionKey'] = 'permissionAllowed';
             }
             $elements[$key] = $element;
         }
+        $permissionID = $this->ReadPropertyInteger('PermissionVar');
+        if ($permissionID <= 0) {
+            $permissionID = $this->ReadPropertyInteger('RoomPermissionVar');
+        }
+        $elements['permission'] = [
+            'label' => $this->ReadPropertyString('LabelPermission'),
+            'available' => $permissionID > 0 && IPS_VariableExists($permissionID),
+            'valueKey' => 'permission',
+            'target' => false,
+            'shape' => 'text',
+            'x' => $this->ReadPropertyInteger('PositionPermissionX'),
+            'y' => $this->ReadPropertyInteger('PositionPermissionY'),
+            'textOffsetX' => $this->ReadPropertyInteger('DisplayPermissionTextOffsetX'),
+            'textOffsetY' => $this->ReadPropertyInteger('DisplayPermissionTextOffsetY'),
+            'styles' => ['label' => $textStyles['permission'], 'value' => $textStyles['permission']]
+        ];
 
         return [
             'config' => [
@@ -571,14 +497,6 @@ class HeizungKlimaKachel extends IPSModule
                 'nameOffsetY'  => $this->ReadPropertyInteger('NameOffsetY'),
                 'elements' => $elements,
                 'textStyles'   => $textStyles,
-                'seasonInvert' => $this->ReadPropertyBoolean('SeasonInvert'),
-                'heatInvert'   => $this->ReadPropertyBoolean('HeatInvert'),
-                'coolInvert'   => $this->ReadPropertyBoolean('CoolInvert'),
-                'fanInvert'    => $this->ReadPropertyBoolean('FanInvert'),
-                'colorCold'    => $this->Col('ColorCold', '#3B82F6'),
-                'colorWarm'    => $this->Col('ColorWarm', '#F97316'),
-                'colorVent'    => $this->Col('ColorVent', '#14B8A6'),
-                'textColor'    => $this->Col('TextColor', null),
                 'bgColor'      => $this->Col('BackgroundColor', null),
                 'bgOpacity'    => $this->ReadPropertyInteger('BackgroundOpacity'),
                 'image'        => $this->GetImage()
@@ -600,27 +518,6 @@ class HeizungKlimaKachel extends IPSModule
         }
         $variable = IPS_GetVariable($id);
         return $variable['VariableType'] === 0 && (bool) GetValue($id);
-    }
-
-    private function GetDisplayColorDefaults(string $channel): array
-    {
-        if ($channel === 'CO2') {
-            return [hexdec('22C55E'), hexdec('EF4444')];
-        }
-        if ($channel === 'Vent' || $channel === 'VentTarget') {
-            return [hexdec('14B8A6'), hexdec('14B8A6')];
-        }
-        return [hexdec('3B82F6'), hexdec('F97316')];
-    }
-
-    private function GetDisplayStyles(array $textStyles, string $key, string $stylePrefix): array
-    {
-        $base = $key === 'co2' ? 'co2' : lcfirst(substr($stylePrefix, 4));
-        $style = $textStyles[$base] ?? [];
-        return [
-            'label' => $style,
-            'value' => $style
-        ];
     }
 
     private function Col(string $property, ?string $fallback): ?string
