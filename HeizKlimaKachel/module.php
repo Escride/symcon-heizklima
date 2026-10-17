@@ -35,6 +35,16 @@ class HeizungKlimaKachel extends IPSModule
         'ventPower'   => 'VentPowerVar'
     ];
 
+    private const LAYOUT_GROUPS = [
+        'season' => 'Season',
+        'actual' => 'Actual',
+        'target' => 'Target',
+        'heat'   => 'Heat',
+        'cool'   => 'Cool',
+        'co2'    => 'CO2',
+        'vent'   => 'Vent'
+    ];
+
     public function Create()
     {
         parent::Create();
@@ -50,6 +60,26 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyString('NamePosition', 'top-left');
         $this->RegisterPropertyInteger('NameOffsetX', 0);
         $this->RegisterPropertyInteger('NameOffsetY', 0);
+
+        $this->RegisterPropertyString('DisplayLayout', 'standard');
+        $this->RegisterPropertyString('LayoutPreset', 'standard');
+        $this->RegisterPropertyInteger('LayoutElementWidth', 42);
+        $this->RegisterPropertyString('ScaleShape', 'straight');
+        $this->RegisterPropertyInteger('ScaleStartAngle', 0);
+        $this->RegisterPropertyInteger('ScaleSweepAngle', 180);
+        $defaultPositions = [
+            'season' => [50, 10],
+            'actual' => [24, 35],
+            'target' => [76, 35],
+            'heat'   => [24, 60],
+            'cool'   => [76, 60],
+            'co2'    => [24, 85],
+            'vent'   => [76, 85]
+        ];
+        foreach (self::LAYOUT_GROUPS as $key => $property) {
+            $this->RegisterPropertyInteger('Position' . $property . 'X', $defaultPositions[$key][0]);
+            $this->RegisterPropertyInteger('Position' . $property . 'Y', $defaultPositions[$key][1]);
+        }
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
             $this->RegisterPropertyInteger('Text' . $property . 'Color', 0);
@@ -146,6 +176,9 @@ class HeizungKlimaKachel extends IPSModule
             case 'ResetAppearance':
                 $this->ResetAppearance();
                 break;
+            case 'ApplyLayoutPreset':
+                $this->ApplyLayoutPreset((string) $Value);
+                break;
         }
     }
 
@@ -172,6 +205,12 @@ class HeizungKlimaKachel extends IPSModule
             'NamePosition'     => 'top-left',
             'NameOffsetX'      => 0,
             'NameOffsetY'      => 0,
+            'DisplayLayout'    => 'standard',
+            'LayoutPreset'     => 'standard',
+            'LayoutElementWidth' => 42,
+            'ScaleShape'       => 'straight',
+            'ScaleStartAngle'  => 0,
+            'ScaleSweepAngle'  => 180,
             'ColorCold'        => hexdec('3B82F6'),
             'ColorWarm'        => hexdec('F97316'),
             'ColorVent'        => hexdec('14B8A6'),
@@ -195,6 +234,20 @@ class HeizungKlimaKachel extends IPSModule
             $defaults['Text' . $property . 'ImageOpacity'] = 100;
         }
 
+        $defaultPositions = [
+            'season' => [50, 10],
+            'actual' => [24, 35],
+            'target' => [76, 35],
+            'heat'   => [24, 60],
+            'cool'   => [76, 60],
+            'co2'    => [24, 85],
+            'vent'   => [76, 85]
+        ];
+        foreach (self::LAYOUT_GROUPS as $key => $property) {
+            $defaults['Position' . $property . 'X'] = $defaultPositions[$key][0];
+            $defaults['Position' . $property . 'Y'] = $defaultPositions[$key][1];
+        }
+
         foreach ($defaults as $property => $value) {
             if (!IPS_SetProperty($this->InstanceID, $property, (string) $value)) {
                 throw new RuntimeException('Could not reset appearance property: ' . $property);
@@ -203,6 +256,57 @@ class HeizungKlimaKachel extends IPSModule
 
         if (!IPS_ApplyChanges($this->InstanceID)) {
             throw new RuntimeException('Could not apply appearance defaults.');
+        }
+    }
+
+    private function ApplyLayoutPreset(string $preset): void
+    {
+        $presets = [
+            'standard' => ['layout' => 'standard', 'shape' => 'straight', 'start' => 0, 'sweep' => 180, 'width' => 42],
+            'half-right' => ['layout' => 'free', 'shape' => 'arc', 'start' => 0, 'sweep' => 180, 'width' => 42],
+            'half-left' => ['layout' => 'free', 'shape' => 'arc', 'start' => 180, 'sweep' => 180, 'width' => 42],
+            'quarter-upper-right' => ['layout' => 'free', 'shape' => 'arc', 'start' => 0, 'sweep' => 90, 'width' => 42],
+            'quarter-lower-right' => ['layout' => 'free', 'shape' => 'arc', 'start' => 90, 'sweep' => 90, 'width' => 42],
+            'quarter-lower-left' => ['layout' => 'free', 'shape' => 'arc', 'start' => 180, 'sweep' => 90, 'width' => 42],
+            'quarter-upper-left' => ['layout' => 'free', 'shape' => 'arc', 'start' => 270, 'sweep' => 90, 'width' => 42]
+        ];
+
+        if (!isset($presets[$preset])) {
+            throw new InvalidArgumentException('Unknown layout preset: ' . $preset);
+        }
+
+        $settings = $presets[$preset];
+        $properties = [
+            'DisplayLayout' => $settings['layout'],
+            'LayoutPreset' => $preset,
+            'LayoutElementWidth' => $settings['width'],
+            'ScaleShape' => $settings['shape'],
+            'ScaleStartAngle' => $settings['start'],
+            'ScaleSweepAngle' => $settings['sweep']
+        ];
+
+        $defaultPositions = [
+            'season' => [50, 10],
+            'actual' => [24, 35],
+            'target' => [76, 35],
+            'heat'   => [24, 60],
+            'cool'   => [76, 60],
+            'co2'    => [24, 85],
+            'vent'   => [76, 85]
+        ];
+        foreach (self::LAYOUT_GROUPS as $key => $property) {
+            $properties['Position' . $property . 'X'] = $defaultPositions[$key][0];
+            $properties['Position' . $property . 'Y'] = $defaultPositions[$key][1];
+        }
+
+        foreach ($properties as $property => $value) {
+            if (!IPS_SetProperty($this->InstanceID, $property, (string) $value)) {
+                throw new RuntimeException('Could not apply layout preset property: ' . $property);
+            }
+        }
+
+        if (!IPS_ApplyChanges($this->InstanceID)) {
+            throw new RuntimeException('Could not apply layout preset.');
         }
     }
 
@@ -244,12 +348,26 @@ class HeizungKlimaKachel extends IPSModule
             ];
         }
 
+        $positions = [];
+        foreach (self::LAYOUT_GROUPS as $key => $property) {
+            $positions[$key] = [
+                'x' => $this->ReadPropertyInteger('Position' . $property . 'X'),
+                'y' => $this->ReadPropertyInteger('Position' . $property . 'Y')
+            ];
+        }
+
         return [
             'config' => [
                 'name'         => $this->ReadPropertyString('Name'),
                 'namePosition' => $this->ReadPropertyString('NamePosition'),
                 'nameOffsetX'  => $this->ReadPropertyInteger('NameOffsetX'),
                 'nameOffsetY'  => $this->ReadPropertyInteger('NameOffsetY'),
+                'displayLayout' => $this->ReadPropertyString('DisplayLayout'),
+                'layoutElementWidth' => $this->ReadPropertyInteger('LayoutElementWidth'),
+                'scaleShape' => $this->ReadPropertyString('ScaleShape'),
+                'scaleStartAngle' => $this->ReadPropertyInteger('ScaleStartAngle'),
+                'scaleSweepAngle' => $this->ReadPropertyInteger('ScaleSweepAngle'),
+                'positions' => $positions,
                 'textStyles'   => $textStyles,
                 'labels'       => [
                     'actual' => $this->ReadPropertyString('LabelActual'),

@@ -33,6 +33,126 @@
         },
         {
             "type": "ExpansionPanel",
+            "caption": "Aufbau",
+            "items": [
+                { "type": "Label", "label": "Voreinstellung wählen und anwenden. Danach können Anzeigebereiche und Winkel einzeln angepasst werden. Winkel 0° ist oben (Norden); positive Werte laufen im Uhrzeigersinn." },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Select",
+                            "name": "LayoutPreset",
+                            "caption": "Voreinstellung",
+                            "options": [
+                                { "caption": "Standard (untereinander)", "value": "standard" },
+                                { "caption": "Halbkreis rechts", "value": "half-right" },
+                                { "caption": "Halbkreis links", "value": "half-left" },
+                                { "caption": "Viertel oben rechts", "value": "quarter-upper-right" },
+                                { "caption": "Viertel unten rechts", "value": "quarter-lower-right" },
+                                { "caption": "Viertel unten links", "value": "quarter-lower-left" },
+                                { "caption": "Viertel oben links", "value": "quarter-upper-left" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Button",
+                    "name": "ApplyLayoutPreset",
+                    "caption": "Voreinstellung anwenden",
+                    "onClick": "IPS_RequestAction($id, 'ApplyLayoutPreset', $LayoutPreset);"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Select",
+                            "name": "DisplayLayout",
+                            "caption": "Anordnung",
+                            "options": [
+                                { "caption": "Standard", "value": "standard" },
+                                { "caption": "Freie Positionierung", "value": "free" }
+                            ]
+                        },
+                        {
+                            "type": "Select",
+                            "name": "ScaleShape",
+                            "caption": "Anzeigen als",
+                            "options": [
+                                { "caption": "Gerade Balken", "value": "straight" },
+                                { "caption": "Gebogene Skalen", "value": "arc" }
+                            ]
+                        },
+                        { "type": "NumberSpinner", "name": "LayoutElementWidth", "caption": "Anzeigenbreite", "minimum": 15, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "ScaleStartAngle", "caption": "Startwinkel (0° = Norden)", "minimum": 0, "maximum": 359, "suffix": "°" },
+                        { "type": "NumberSpinner", "name": "ScaleSweepAngle", "caption": "Bogenweite", "minimum": 1, "maximum": 359, "suffix": "°" }
+                    ]
+                },
+                { "type": "Label", "label": "Positionen in Prozent der Kachelgröße; X/Y bezeichnet jeweils die Mitte der Anzeige." },
+                { "type": "Label", "label": "Saison" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionSeasonX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionSeasonY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "Istwert" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionActualX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionActualY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "Sollwert" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionTargetX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionTargetY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "Heizung" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionHeatX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionHeatY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "Klima" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionCoolX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionCoolY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "CO₂" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionCO2X", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionCO2Y", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                },
+                { "type": "Label", "label": "Lüftung" },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        { "type": "NumberSpinner", "name": "PositionVentX", "caption": "X", "minimum": 0, "maximum": 100, "suffix": "%" },
+                        { "type": "NumberSpinner", "name": "PositionVentY", "caption": "Y", "minimum": 0, "maximum": 100, "suffix": "%" }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
             "caption": "Saison",
             "items": [
                 { "type": "SelectVariable", "name": "SeasonVar", "caption": "Variable (Bool): TRUE = Winter/Heizen, FALSE = Sommer/Kühlen" },
@@ -245,8 +365,8 @@
         },
         {
             "type": "ExpansionPanel",
-            "caption": "Zurücksetzen",
-            "items": [{"type":"Label","label":"Setzt ausschließlich Farben, Texte, Rahmen, Bilder und deren Positionen auf die Standardwerte zurück. Variablen, Beschriftungen und fachliche Einstellungen bleiben erhalten."}, {"type":"Button","name":"ResetAppearance","caption":"Optische Standardeinstellungen wiederherstellen","confirm":"Sollen alle optischen Einstellungen auf die Standardwerte zurückgesetzt werden? Variablen und ihre Einstellungen bleiben erhalten.","onClick":"if (IPS_RequestAction($id, \u0027ResetAppearance\u0027, true)) { echo \u0027Optische Standardeinstellungen wurden wiederhergestellt.\u0027; } else { throw new Exception(\u0027Die optischen Standardeinstellungen konnten nicht wiederhergestellt werden.\u0027); }"}]
+            "caption": "Sonstiges",
+            "items": [{"type":"Label","label":"Setzt Farben, Textstile, Rahmen, Bilder, Anordnung, Positionen und Winkel auf ihre Standardwerte zurück. Variablen, Beschriftungen und fachliche Einstellungen bleiben erhalten."}, {"type":"Button","name":"ResetAppearance","caption":"Optische Standardeinstellungen wiederherstellen","confirm":"Sollen alle optischen Einstellungen auf die Standardwerte zurückgesetzt werden? Variablen und ihre Einstellungen bleiben erhalten.","onClick":"if (IPS_RequestAction($id, \u0027ResetAppearance\u0027, true)) { echo \u0027Optische Standardeinstellungen wurden wiederhergestellt.\u0027; } else { throw new Exception(\u0027Die optischen Standardeinstellungen konnten nicht wiederhergestellt werden.\u0027); }"}]
         }
     ],
     "actions": [],

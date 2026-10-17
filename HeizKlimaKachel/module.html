@@ -22,6 +22,15 @@
            overflow: hidden; background: var(--track); }
     .grad { position: absolute; top: 0; left: 0; right: 0; bottom: 0; clip-path: inset(0 100% 0 0);
             transition: clip-path .4s ease; }
+    .arc-meter { display: none; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .arc-track, .arc-progress { fill: none; stroke-width: 8; }
+    .arc-track { stroke: var(--track); }
+    .arc-progress { stroke: currentColor; stroke-linecap: round; transition: stroke-dashoffset .4s ease; }
+    .bar.arc { height: 64px; overflow: visible; background: transparent; }
+    .bar.arc .grad { display: none; }
+    .bar.arc .arc-meter { display: block; }
+    .bar.arc .txt { flex-direction: column; justify-content: center; gap: 2px; padding: 10px; text-align: center; }
+    .bar.arc .txt span:last-child { font-weight: 600; }
     .txt { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between;
            align-items: center; padding: 0 12px; font-size: .875rem; color: #fff; pointer-events: none; }
     .styled-text { position: relative; z-index: 0; isolation: isolate; border-radius: 4px; }
@@ -40,6 +49,7 @@
     #block .bar { flex: none; }
     #block .bar.top { border-radius: 10px 10px 0 0; }
     #block .bar.bottom { border-radius: 0 0 10px 10px; touch-action: pan-y; cursor: ew-resize; }
+    #block .bar.bottom.arc { touch-action: none; cursor: pointer; }
     #block.single .bar { border-radius: 10px; }
     #tgtGrad { opacity: .6; }
     #thumb { position: absolute; top: 4px; bottom: 4px; width: 6px; border-radius: 3px; background: #fff;
@@ -53,6 +63,24 @@
     .ind.on { color: #fff; }
     .ind.spin svg { animation: spin 1.3s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #tile.free-layout #content { display: block; padding: 0; overflow: hidden; }
+    #tile.free-layout #head,
+    #tile.free-layout #actBar,
+    #tile.free-layout #tgtBar,
+    #tile.free-layout #heatRow,
+    #tile.free-layout #coolRow,
+    #tile.free-layout #co2Row,
+    #tile.free-layout #ventRow {
+        position: absolute; z-index: 1; left: var(--position-x); top: var(--position-y);
+        width: var(--element-width); max-width: 100%; transform: translate(-50%, -50%);
+    }
+    #tile.free-layout #block { display: contents; }
+    #tile.free-layout .row { gap: 4px; }
+    #tile.free-layout .bar { width: var(--element-width); min-width: 0; flex: none; }
+    #tile.free-layout .row .bar { width: auto; flex: 1; }
+    #tile.free-layout #season { text-align: center; }
+    #tile.free-layout #ventRow .ind { width: 28px; height: 28px; }
+    #tile.free-layout #name { z-index: 3; }
 </style>
 
 <div id="tile">
@@ -66,10 +94,12 @@
         <!-- Ist- und Sollwert -->
         <div id="block">
             <div class="bar top" id="actBar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="actGrad"></div>
                 <div class="txt"><span id="actLbl"></span><span id="actVal"></span></div>
             </div>
             <div class="bar bottom" id="tgtBar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="tgtGrad"></div>
                 <div id="thumb"></div>
                 <div class="txt"><span id="tgtLbl"></span><span id="tgtVal"></span></div>
@@ -82,6 +112,7 @@
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>
             </button>
             <div class="bar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="heatGrad"></div>
                 <div class="txt"><span id="heatLbl"></span><span id="heatVal"></span></div>
             </div>
@@ -93,6 +124,7 @@
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>
             </button>
             <div class="bar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="coolGrad"></div>
                 <div class="txt"><span id="coolLbl"></span><span id="coolVal"></span></div>
             </div>
@@ -101,6 +133,7 @@
         <!-- CO2 -->
         <div class="row" id="co2Row">
             <div class="bar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="co2Grad"></div>
                 <div class="txt"><span id="co2Lbl"></span><span id="co2Val"></span></div>
             </div>
@@ -117,6 +150,7 @@
                 </svg>
             </div>
             <div class="bar">
+                <svg class="arc-meter" viewBox="0 0 100 100" aria-hidden="true"><path class="arc-track" pathLength="100"></path><path class="arc-progress" pathLength="100"></path></svg>
                 <div class="grad" id="ventGrad"></div>
                 <div class="txt"><span id="ventLbl"></span><span id="ventVal"></span></div>
             </div>
@@ -135,6 +169,76 @@
     const pct = (v, min, max) => max > min ? clamp((v - min) / (max - min) * 100, 0, 100) : 0;
     const show = (el, on, display) => { el.style.display = on ? (display || '') : 'none'; };
     const clip = (el, p) => { el.style.clipPath = 'inset(0 ' + (100 - clamp(p, 0, 100)) + '% 0 0)'; };
+    const meterIds = ['actBar', 'tgtBar', 'heatRow', 'coolRow', 'co2Row', 'ventRow'];
+
+    function arcPath(start, sweep) {
+        const point = angle => {
+            const radians = (((angle % 360) + 360) % 360) * Math.PI / 180;
+            return [50 + 43 * Math.sin(radians), 50 - 43 * Math.cos(radians)];
+        };
+        const from = point(start), to = point(start + sweep);
+        const largeArc = Math.abs(sweep) > 180 ? 1 : 0;
+        const direction = sweep >= 0 ? 1 : 0;
+        return 'M ' + from[0] + ' ' + from[1] + ' A 43 43 0 ' + largeArc + ' ' + direction + ' ' + to[0] + ' ' + to[1];
+    }
+
+    function setMeter(el, progress, color) {
+        const value = clamp(isNum(progress) ? progress : 0, 0, 100);
+        const grad = el.querySelector('.grad');
+        if (grad) clip(grad, value);
+        const path = arcPath(cfg.scaleStartAngle, cfg.scaleSweepAngle);
+        const track = el.querySelector('.arc-track');
+        if (track) track.setAttribute('d', path);
+        const arc = el.querySelector('.arc-progress');
+        if (arc) {
+            arc.setAttribute('d', path);
+            arc.style.strokeDasharray = '100 100';
+            arc.style.strokeDashoffset = String(100 - value);
+            arc.style.stroke = color || 'currentColor';
+        }
+    }
+
+    function applyLayout() {
+        const custom = cfg.displayLayout === 'free';
+        $('tile').classList.toggle('free-layout', custom);
+        const groups = {
+            head: 'season',
+            actBar: 'actual',
+            tgtBar: 'target',
+            heatRow: 'heat',
+            coolRow: 'cool',
+            co2Row: 'co2',
+            ventRow: 'vent'
+        };
+        Object.keys(groups).forEach(function (id) {
+            const el = $(id);
+            const position = cfg.positions && cfg.positions[groups[id]];
+            if (!custom || !position) {
+                el.style.removeProperty('--position-x');
+                el.style.removeProperty('--position-y');
+                el.style.removeProperty('--element-width');
+                return;
+            }
+            el.style.setProperty('--position-x', clamp(position.x, 0, 100) + '%');
+            el.style.setProperty('--position-y', clamp(position.y, 0, 100) + '%');
+            el.style.setProperty('--element-width', clamp(cfg.layoutElementWidth, 15, 100) + '%');
+        });
+        meterIds.forEach(function (id) {
+            const el = $(id);
+            const path = arcPath(cfg.scaleStartAngle, cfg.scaleSweepAngle);
+            el.querySelectorAll('.arc-track, .arc-progress').forEach(function (meterPath) {
+                meterPath.setAttribute('d', path);
+            });
+            if (el.classList.contains('bar')) {
+                el.classList.toggle('arc', cfg.scaleShape === 'arc');
+            } else {
+                el.querySelectorAll('.bar').forEach(function (bar) {
+                    bar.classList.toggle('arc', cfg.scaleShape === 'arc');
+                });
+            }
+        });
+        $('thumb').style.display = cfg.scaleShape === 'arc' ? 'none' : '';
+    }
 
     function rgba(hex, a) {
         const n = parseInt(hex.slice(1), 16);
@@ -249,7 +353,7 @@
     function renderTarget() {
         const v = dragging ? dragVal : vals.target;
         const p = isNum(v) ? pct(v, cfg.min, cfg.max) : 0;
-        clip($('tgtGrad'), p);
+        setMeter($('tgtBar'), p, cfg.colorWarm);
         $('thumb').style.left = 'calc(' + p + '% - ' + (p * 0.06) + 'px)';
         $('tgtVal').textContent = isNum(v) ? fmt(v, 1) + ' °C' : '–';
     }
@@ -264,7 +368,7 @@
         if (isNum(power)) { p = clamp(power, 0, 100); if (invert) p = 100 - p; }
 
         $(prefix + 'Grad').style.background = 'linear-gradient(90deg,' + rgba(color, .35) + ',' + color + ')';
-        clip($(prefix + 'Grad'), p === null ? 0 : p);
+        setMeter(row, p === null ? 0 : p, color);
         $(prefix + 'Val').textContent = p === null ? '–' : fmt(p, 0) + ' %';
 
         const btn = $(prefix + 'Btn');
@@ -282,6 +386,7 @@
         applyBackground();
         applyNamePosition();
         applyTextStyles();
+        applyLayout();
 
         // Kopf
         $('name').textContent = cfg.name;
@@ -302,14 +407,14 @@
 
         show($('actBar'), has.actual);
         show($('tgtBar'), has.target);
-        show($('block'), has.actual || has.target, 'flex');
+        show($('block'), has.actual || has.target, cfg.displayLayout === 'free' ? 'contents' : 'flex');
         $('block').classList.toggle('single', !(has.actual && has.target));
 
         $('actLbl').textContent = cfg.labels.actual;
         $('tgtLbl').textContent = cfg.labels.target;
         if (has.actual) {
             const v = vals.actual;
-            clip($('actGrad'), isNum(v) ? pct(v, cfg.min, cfg.max) : 0);
+            setMeter($('actBar'), isNum(v) ? pct(v, cfg.min, cfg.max) : 0, cfg.colorWarm);
             $('actVal').textContent = isNum(v) ? fmt(v, 1) + ' °C' : '–';
         }
         if (has.target) renderTarget();
@@ -326,7 +431,7 @@
             $('co2Lbl').textContent = cfg.labels.co2;
             $('co2Grad').style.background = 'linear-gradient(90deg,#22C55E,#EAB308,#EF4444)';
             const v = vals.co2;
-            clip($('co2Grad'), isNum(v) ? pct(v, cfg.co2Min, cfg.co2Max) : 0);
+            setMeter($('co2Row'), isNum(v) ? pct(v, cfg.co2Min, cfg.co2Max) : 0, '#EF4444');
             $('co2Val').textContent = isNum(v) ? fmt(v, 0) + ' ppm' : '–';
         }
 
@@ -345,20 +450,32 @@
 
             if (has.ventPower && isNum(vals.ventPower)) {
                 const p = clamp(vals.ventPower, 0, 100);
-                clip($('ventGrad'), p);
+                setMeter($('ventRow'), p, cfg.colorVent);
                 $('ventVal').textContent = fmt(p, 0) + ' %';
             } else {
-                clip($('ventGrad'), active ? 100 : 0);
+                setMeter($('ventRow'), active ? 100 : 0, cfg.colorVent);
                 $('ventVal').textContent = active ? 'An' : 'Aus';
             }
         }
+        applyLayout();
     }
 
     // ---- Schieber Sollwert ----
     const tgtBar = $('tgtBar');
     function valFromEvent(e) {
         const r = tgtBar.getBoundingClientRect();
-        const f = clamp((e.clientX - r.left) / r.width, 0, 1);
+        let f;
+        if (cfg.scaleShape === 'arc') {
+            const dx = e.clientX - (r.left + r.width / 2);
+            const dy = e.clientY - (r.top + r.height / 2);
+            const angle = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
+            const sweep = cfg.scaleSweepAngle;
+            const start = ((cfg.scaleStartAngle % 360) + 360) % 360;
+            const delta = sweep >= 0 ? (angle - start + 360) % 360 : (start - angle + 360) % 360;
+            f = clamp(delta / Math.max(1, Math.abs(sweep)), 0, 1);
+        } else {
+            f = clamp((e.clientX - r.left) / r.width, 0, 1);
+        }
         const step = cfg.step > 0 ? cfg.step : 0.5;
         let v = cfg.min + f * (cfg.max - cfg.min);
         v = Math.round(v / step) * step;
