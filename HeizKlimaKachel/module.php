@@ -52,25 +52,29 @@ class HeizungKlimaKachel extends IPSModule
     private const DISPLAY_ELEMENTS = [
         'season'        => ['Season', 'Saison', 'Season', 'season', false, 'TextSeason'],
         'actual'        => ['Actual', 'Istwert', 'Room', 'actual', false, 'TextActual'],
-        'target'        => ['Target', 'Sollwert', 'Room', 'target', true, 'TextTarget'],
+        'target'        => ['Target', 'Sollwert', 'RoomTarget', 'target', true, 'TextTarget'],
         'valveActual'   => ['ValveActual', 'Ventilstellung', 'Valve', 'valveActual', false, 'TextHeat'],
         'ventActual'    => ['VentActual', 'Lüftung Istwert', 'Vent', 'ventActual', false, 'TextVent'],
-        'ventTarget'    => ['VentTarget', 'Lüftung Sollwert', 'Vent', 'ventTarget', true, 'TextVentTarget'],
+        'ventTarget'    => ['VentTarget', 'Lüftung Sollwert', 'VentTarget', 'ventTarget', true, 'TextVentTarget'],
         'co2'           => ['CO2', 'CO₂', 'CO2', 'co2', false, 'TextCO2'],
         'climateActual' => ['ClimateActual', 'Kühlung Istwert', 'Climate', 'climateActual', false, 'TextCool'],
-        'climateTarget' => ['ClimateTarget', 'Kühlung Sollwert', 'Climate', 'climateTarget', true, 'TextClimateTarget'],
+        'climateTarget' => ['ClimateTarget', 'Kühlung Sollwert', 'ClimateTarget', 'climateTarget', true, 'TextClimateTarget'],
         'fanActual'     => ['FanActual', 'Lüfterstufe Istwert', 'Fan', 'fanActual', false, 'TextFan'],
-        'fanTarget'     => ['FanTarget', 'Lüfterstufe Sollwert', 'Fan', 'fanTarget', true, 'TextFanTarget']
+        'fanTarget'     => ['FanTarget', 'Lüfterstufe Sollwert', 'FanTarget', 'fanTarget', true, 'TextFanTarget']
     ];
 
     private const CHANNEL_DEFAULTS = [
         'Season'  => [0.0, 1.0, 0.5],
         'Room'    => [15.0, 30.0, 22.5],
+        'RoomTarget' => [5.0, 35.0, 20.0],
         'Valve'   => [0.0, 100.0, 50.0],
         'Vent'    => [0.0, 100.0, 50.0],
+        'VentTarget' => [0.0, 100.0, 50.0],
         'CO2'     => [400.0, 2000.0, 1200.0],
         'Climate' => [15.0, 35.0, 25.0],
-        'Fan'     => [0.0, 7.0, 3.5]
+        'ClimateTarget' => [15.0, 35.0, 25.0],
+        'Fan'     => [0.0, 7.0, 3.5],
+        'FanTarget' => [0.0, 7.0, 3.5]
     ];
 
     private const CONTROL_DEFAULTS = [
@@ -78,6 +82,21 @@ class HeizungKlimaKachel extends IPSModule
         'vent'    => [0.0, 100.0, 1.0],
         'climate' => [15.0, 35.0, 0.5],
         'fan'     => [0.0, 7.0, 1.0]
+    ];
+
+    private const COLOR_PALETTES = [
+        'symcon' => ['F2F5F8', '17212B', '2774AE', 'E69A36'],
+        'classic' => ['EFE7D3', '392F24', '447744', 'BD542B'],
+        'modern' => ['F3F4F6', '111827', '2563EB', 'F97316'],
+        'futuristic' => ['0B1020', 'EAF2FF', '00D9FF', '8B5CF6'],
+        'neon-green-orange' => ['101710', 'E7FFE5', '39FF14', 'FF6A00'],
+        'neon-blue-yellow' => ['0A1020', 'E8F4FF', '00A6FF', 'FFE600'],
+        'neon-pink-cyan' => ['180D1A', 'FFF0FF', 'FF2BD6', '00F5FF'],
+        'neon-purple-green' => ['120D1D', 'F2EFFF', 'B026FF', '39FF14'],
+        'neon-red-cyan' => ['1A0D10', 'FFF0F0', 'FF1744', '00F5FF'],
+        'neon-orange-purple' => ['1B1009', 'FFF4E8', 'FF6A00', 'B026FF'],
+        'neon-green-pink' => ['0D1711', 'EDFFF2', '39FF14', 'FF2BD6'],
+        'neon-blue-orange' => ['0C1220', 'EDF5FF', '00A6FF', 'FF6A00']
     ];
 
     public function Create()
@@ -108,6 +127,8 @@ class HeizungKlimaKachel extends IPSModule
             $this->RegisterPropertyInteger('Display' . $property . 'SweepAngle', 180);
             $this->RegisterPropertyInteger('Display' . $property . 'BorderWidth', 0);
             $this->RegisterPropertyInteger('Display' . $property . 'BorderColor', -1);
+            $this->RegisterPropertyInteger('Display' . $property . 'TextOffsetX', 0);
+            $this->RegisterPropertyInteger('Display' . $property . 'TextOffsetY', 0);
         }
         foreach (self::CHANNEL_DEFAULTS as $channel => [$min, $max, $mid]) {
             $this->RegisterPropertyFloat('Range' . $channel . 'Min', $min);
@@ -163,6 +184,7 @@ class HeizungKlimaKachel extends IPSModule
         $this->RegisterPropertyString('ImagePosition', 'full');
         $this->RegisterPropertyInteger('ImageSize', 50);
         $this->RegisterPropertyInteger('ImageOpacity', 40);
+        $this->RegisterPropertyString('ColorPalette', 'symcon');
 
         foreach (self::DISPLAY_ELEMENTS as $key => [$property]) {
             $this->RegisterPropertyString('Label' . $property, self::DISPLAY_ELEMENTS[$key][1]);
@@ -217,10 +239,20 @@ class HeizungKlimaKachel extends IPSModule
             $this->SetTarget(substr((string) $Ident, strlen('setTarget:')), (float) $Value);
             return;
         }
+        if (strpos((string) $Ident, 'ApplyLayoutPreset:') === 0) {
+            $this->ApplyLayoutPreset(substr((string) $Ident, strlen('ApplyLayoutPreset:')));
+            return;
+        }
 
         switch ($Ident) {
             case 'ResetAppearance':
                 $this->ResetAppearance();
+                break;
+            case 'SetPalette':
+                if (!is_string($Value)) {
+                    throw new InvalidArgumentException('Palette name must be a string.');
+                }
+                $this->SetPalette($Value);
                 break;
         }
     }
@@ -249,7 +281,8 @@ class HeizungKlimaKachel extends IPSModule
             'BackgroundImage'  => 0,
             'ImagePosition'    => 'full',
             'ImageSize'        => 50,
-            'ImageOpacity'     => 40
+            'ImageOpacity'     => 40,
+            'ColorPalette'     => 'symcon'
         ];
 
         foreach (self::TEXT_ELEMENTS as [$property, $fontSize]) {
@@ -285,6 +318,8 @@ class HeizungKlimaKachel extends IPSModule
             $defaults['Display' . $property . 'SweepAngle'] = 180;
             $defaults['Display' . $property . 'BorderWidth'] = 0;
             $defaults['Display' . $property . 'BorderColor'] = -1;
+            $defaults['Display' . $property . 'TextOffsetX'] = 0;
+            $defaults['Display' . $property . 'TextOffsetY'] = 0;
         }
 
         foreach ($defaults as $property => $value) {
@@ -293,8 +328,98 @@ class HeizungKlimaKachel extends IPSModule
             }
         }
 
+        $this->WritePaletteProperties('symcon');
         if (!IPS_ApplyChanges($this->InstanceID)) {
             throw new RuntimeException('Could not apply appearance defaults.');
+        }
+    }
+
+    private function SetPalette(string $palette): void
+    {
+        $this->WritePaletteProperties($palette);
+        if (!IPS_ApplyChanges($this->InstanceID)) {
+            throw new RuntimeException('Could not apply color palette: ' . $palette);
+        }
+    }
+
+    private function WritePaletteProperties(string $palette): void
+    {
+        if (!isset(self::COLOR_PALETTES[$palette])) {
+            throw new InvalidArgumentException('Unknown color palette: ' . $palette);
+        }
+        [$background, $text, $low, $high] = self::COLOR_PALETTES[$palette];
+        $properties = [
+            'ColorPalette' => $palette,
+            'BackgroundColor' => hexdec($background),
+            'BackgroundOpacity' => 100
+        ];
+        foreach (self::DISPLAY_ELEMENTS as [$property]) {
+            $properties['Color' . $property . 'Low'] = hexdec($low);
+            $properties['Color' . $property . 'High'] = hexdec($high);
+        }
+        foreach (self::TEXT_ELEMENTS as [$property]) {
+            $properties['Text' . $property . 'Color'] = hexdec($text);
+        }
+        foreach ($properties as $property => $value) {
+            if (!IPS_SetProperty($this->InstanceID, $property, (string) $value)) {
+                throw new RuntimeException('Could not set palette property: ' . $property);
+            }
+        }
+    }
+
+    private function ApplyLayoutPreset(string $arguments): void
+    {
+        $parts = explode(':', $arguments, 2);
+        if (count($parts) !== 2) {
+            throw new InvalidArgumentException('Layout preset must specify a group and layout.');
+        }
+        [$group, $layout] = $parts;
+        $groups = [
+            'room' => ['actual', 'target', 'valveActual'],
+            'vent' => ['ventActual', 'ventTarget', 'co2'],
+            'climate' => ['climateActual', 'climateTarget', 'fanActual', 'fanTarget']
+        ];
+        if (!isset($groups[$group]) || !in_array($layout, ['bars', 'arcs-stacked', 'arcs-side'], true)) {
+            throw new InvalidArgumentException('Unknown layout preset: ' . $arguments);
+        }
+        $keys = $groups[$group];
+        $count = count($keys);
+        if ($layout === 'arcs-side') {
+            $positions = $count === 3 ? [17, 50, 83] : [13, 38, 62, 87];
+            $width = $count === 3 ? 28 : 23;
+            $yPositions = array_fill(0, $count, 50);
+        } elseif ($layout === 'arcs-stacked') {
+            $positions = array_fill(0, $count, 50);
+            $yPositions = $count === 3 ? [26, 52, 78] : [16, 39, 62, 85];
+            $width = $count === 3 ? 42 : 36;
+        } else {
+            $positions = array_fill(0, $count, 50);
+            $yPositions = $count === 3 ? [26, 52, 78] : [16, 39, 62, 85];
+            $width = 78;
+        }
+
+        foreach ($keys as $index => $key) {
+            [$property] = self::DISPLAY_ELEMENTS[$key];
+            $isArc = $layout !== 'bars';
+            $settings = [
+                'Display' . $property . 'Shape' => $isArc ? 'arc' : 'straight',
+                'Display' . $property . 'Orientation' => 'horizontal',
+                'Display' . $property . 'Width' => $width,
+                'Position' . $property . 'X' => $positions[$index],
+                'Position' . $property . 'Y' => $yPositions[$index],
+                'Display' . $property . 'StartAngle' => 270,
+                'Display' . $property . 'SweepAngle' => 180,
+                'Display' . $property . 'TextOffsetX' => 0,
+                'Display' . $property . 'TextOffsetY' => 0
+            ];
+            foreach ($settings as $propertyName => $value) {
+                if (!IPS_SetProperty($this->InstanceID, $propertyName, (string) $value)) {
+                    throw new RuntimeException('Could not apply layout property: ' . $propertyName);
+                }
+            }
+        }
+        if (!IPS_ApplyChanges($this->InstanceID)) {
+            throw new RuntimeException('Could not apply layout preset: ' . $arguments);
         }
     }
 
@@ -404,6 +529,8 @@ class HeizungKlimaKachel extends IPSModule
                 'width' => $this->ReadPropertyInteger('Display' . $property . 'Width'),
                 'start' => $this->ReadPropertyInteger('Display' . $property . 'StartAngle'),
                 'sweep' => $this->ReadPropertyInteger('Display' . $property . 'SweepAngle'),
+                'textOffsetX' => $this->ReadPropertyInteger('Display' . $property . 'TextOffsetX'),
+                'textOffsetY' => $this->ReadPropertyInteger('Display' . $property . 'TextOffsetY'),
                 'borderWidth' => $this->ReadPropertyInteger('Display' . $property . 'BorderWidth'),
                 'borderColor' => $this->Col('Display' . $property . 'BorderColor', null),
                 'styles' => $this->GetDisplayStyles($textStyles, $key, $stylePrefix),
@@ -480,7 +607,7 @@ class HeizungKlimaKachel extends IPSModule
         if ($channel === 'CO2') {
             return [hexdec('22C55E'), hexdec('EF4444')];
         }
-        if ($channel === 'Vent') {
+        if ($channel === 'Vent' || $channel === 'VentTarget') {
             return [hexdec('14B8A6'), hexdec('14B8A6')];
         }
         return [hexdec('3B82F6'), hexdec('F97316')];

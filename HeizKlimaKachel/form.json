@@ -94,6 +94,32 @@
                          "items":  [
                                        {
                                            "type":  "Label",
+                                           "label":  "LAYOUTVORLAGEN – setzen Form und Positionen der Anzeigen in diesem Abschnitt."
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "roomLayoutbars",
+                                           "caption":  "Balken untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:room:bars\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "roomLayoutarcs-stacked",
+                                           "caption":  "Gebogene Anzeigen untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:room:arcs-stacked\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "roomLayoutarcs-side",
+                                           "caption":  "Gebogene Anzeigen nebeneinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:room:arcs-side\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
                                            "label":  "SAISON – Variable"
                                        },
                                        {
@@ -112,7 +138,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Saison – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Saison – Darstellung"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -130,7 +160,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionSeasonX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -138,12 +168,43 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionSeasonY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplaySeasonTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplaySeasonTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -211,6 +272,10 @@
                                        },
                                        {
                                            "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
                                            "label":  "ISTWERT – Variable und Messbereich"
                                        },
                                        {
@@ -225,7 +290,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -260,10 +329,6 @@
                                                      ]
                                        },
                                        {
-                                           "type":  "Label",
-                                           "label":  "Raumtemperatur Istwert – Darstellung"
-                                       },
-                                       {
                                            "type":  "RowLayout",
                                            "items":  [
                                                          {
@@ -289,7 +354,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayActualShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Raumtemperatur-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -304,7 +369,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayActualOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -324,7 +389,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionActualX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -332,7 +397,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionActualY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -340,7 +405,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayActualWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -349,7 +414,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayActualTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayActualTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -357,7 +449,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayActualStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -365,7 +457,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayActualSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -378,7 +470,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayActualBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -389,6 +481,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -456,7 +552,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "SOLLWERT – Regler"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "SOLLWERT – Variable und Regler"
                                        },
                                        {
                                            "type":  "SelectVariable",
@@ -470,7 +570,43 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Raumtemperatur Sollwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Raumtemperatur-Sollwertanzeige – Skalenbereich und Farbmittelpunkt"
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeRoomTargetMin",
+                                                             "caption":  "Anzeigeskala: Minimum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeRoomTargetMax",
+                                                             "caption":  "Anzeigeskala: Maximum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeRoomTargetMid",
+                                                             "caption":  "Farbwechselpunkt innerhalb der Anzeigeskala",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         }
+                                                     ]
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -498,7 +634,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayTargetShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Raumtemperatur-Sollwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -513,7 +649,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayTargetOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -533,7 +669,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionTargetX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -541,7 +677,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionTargetY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -549,7 +685,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayTargetWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -558,7 +694,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayTargetTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayTargetTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -566,7 +729,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayTargetStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -574,7 +737,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayTargetSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -587,7 +750,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayTargetBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -598,6 +761,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -665,6 +832,10 @@
                                        },
                                        {
                                            "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
                                            "label":  "VENTILSTELLUNG – Variable und Messbereich"
                                        },
                                        {
@@ -679,7 +850,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -715,7 +890,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Ventilstellung Istwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Ventilstellungs-Istwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -743,7 +922,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayValveActualShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Ventilstellungs-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -758,7 +937,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayValveActualOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -778,7 +957,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionValveActualX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -786,7 +965,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionValveActualY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -794,7 +973,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayValveActualWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -803,7 +982,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayValveActualTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayValveActualTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -811,7 +1017,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayValveActualStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -819,7 +1025,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayValveActualSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -832,7 +1038,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayValveActualBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -843,6 +1049,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -915,6 +1125,36 @@
                          "caption":  "Lüftungsanlage",
                          "items":  [
                                        {
+                                           "type":  "Label",
+                                           "label":  "LAYOUTVORLAGEN – setzen Form und Positionen der Anzeigen in diesem Abschnitt."
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "ventLayoutbars",
+                                           "caption":  "Balken untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:vent:bars\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "ventLayoutarcs-stacked",
+                                           "caption":  "Gebogene Anzeigen untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:vent:arcs-stacked\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "ventLayoutarcs-side",
+                                           "caption":  "Gebogene Anzeigen nebeneinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:vent:arcs-side\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANLAGENSTATUS – optionaler Status der Lüftungsanlage"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "VentActiveVar",
                                            "caption":  "Anlagenstatus (BOOL, optional)",
@@ -922,6 +1162,14 @@
                                                                       0
                                                                   ],
                                            "requiredAction":  0
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "LÜFTUNGS-ISTWERT – Variable und Anzeigeskala"
                                        },
                                        {
                                            "type":  "SelectVariable",
@@ -935,7 +1183,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -971,7 +1223,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Lüftungsanlage Istwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Lüftungs-Istwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -999,7 +1255,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayVentActualShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Lüftungs-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -1014,7 +1270,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayVentActualOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -1034,7 +1290,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionVentActualX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1042,7 +1298,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionVentActualY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1050,7 +1306,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentActualWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1059,7 +1315,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayVentActualTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayVentActualTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1067,7 +1350,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentActualStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -1075,7 +1358,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentActualSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -1088,7 +1371,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentActualBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -1099,6 +1382,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -1165,6 +1452,14 @@
                                                      ]
                                        },
                                        {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "LÜFTUNGS-SOLLWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "VentTargetVar",
                                            "caption":  "Lüftungsanlage Sollwert",
@@ -1176,7 +1471,51 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Lüftungsanlage Sollwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Lüftungs-Sollwertanzeige – Skalenbereich und Farbmittelpunkt"
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeVentTargetMin",
+                                                             "caption":  "Anzeigeskala: Minimum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeVentTargetMax",
+                                                             "caption":  "Anzeigeskala: Maximum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeVentTargetMid",
+                                                             "caption":  "Farbwechselpunkt innerhalb der Anzeigeskala",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Lüftungs-Sollwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1204,7 +1543,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayVentTargetShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Lüftungs-Sollwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -1219,7 +1558,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayVentTargetOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -1239,7 +1578,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionVentTargetX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1247,7 +1586,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionVentTargetY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1255,7 +1594,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentTargetWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1264,7 +1603,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayVentTargetTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayVentTargetTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1272,7 +1638,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentTargetStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -1280,7 +1646,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentTargetSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -1293,7 +1659,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayVentTargetBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -1304,6 +1670,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -1370,6 +1740,14 @@
                                                      ]
                                        },
                                        {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "CO₂-ISTWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "CO2Var",
                                            "caption":  "CO₂-Istwert (ppm)",
@@ -1381,7 +1759,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1417,7 +1799,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "CO₂ – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – CO₂-Istwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1445,7 +1831,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayCO2Shape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für CO₂-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -1460,7 +1846,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayCO2Orientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -1480,7 +1866,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionCO2X",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1488,7 +1874,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionCO2Y",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1496,7 +1882,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayCO2Width",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1505,7 +1891,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayCO2TextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayCO2TextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1513,7 +1926,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayCO2StartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -1521,7 +1934,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayCO2SweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -1534,7 +1947,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayCO2BorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -1545,6 +1958,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -1617,6 +2034,36 @@
                          "caption":  "Klimaanlage",
                          "items":  [
                                        {
+                                           "type":  "Label",
+                                           "label":  "LAYOUTVORLAGEN – setzen Form und Positionen der Anzeigen in diesem Abschnitt."
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "climateLayoutbars",
+                                           "caption":  "Balken untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:climate:bars\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "climateLayoutarcs-stacked",
+                                           "caption":  "Gebogene Anzeigen untereinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:climate:arcs-stacked\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Button",
+                                           "name":  "climateLayoutarcs-side",
+                                           "caption":  "Gebogene Anzeigen nebeneinander",
+                                           "onClick":  "IPS_RequestAction($id, \u0027ApplyLayoutPreset:climate:arcs-side\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "KLIMA-ISTWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "CoolPowerVar",
                                            "caption":  "Klimaanlage Istwert (z. B. Temperatur)",
@@ -1628,7 +2075,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1664,7 +2115,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Klimaanlage Istwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Klimaanlagen-Istwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1692,7 +2147,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayClimateActualShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Klimaanlagen-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -1707,7 +2162,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayClimateActualOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -1727,7 +2182,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionClimateActualX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1735,7 +2190,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionClimateActualY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1743,7 +2198,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateActualWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1752,7 +2207,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayClimateActualTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayClimateActualTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1760,7 +2242,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateActualStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -1768,7 +2250,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateActualSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -1781,7 +2263,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateActualBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -1792,6 +2274,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -1858,6 +2344,14 @@
                                                      ]
                                        },
                                        {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "KLIMA-SOLLWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "CoolTargetVar",
                                            "caption":  "Klimaanlage Sollwert",
@@ -1869,7 +2363,51 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Klimaanlage Sollwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Klimaanlagen-Sollwertanzeige – Skalenbereich und Farbmittelpunkt"
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeClimateTargetMin",
+                                                             "caption":  "Anzeigeskala: Minimum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeClimateTargetMax",
+                                                             "caption":  "Anzeigeskala: Maximum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeClimateTargetMid",
+                                                             "caption":  "Farbwechselpunkt innerhalb der Anzeigeskala",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Klimaanlagen-Sollwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1897,7 +2435,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayClimateTargetShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Klimaanlagen-Sollwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -1912,7 +2450,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayClimateTargetOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -1932,7 +2470,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionClimateTargetX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1940,7 +2478,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionClimateTargetY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -1948,7 +2486,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateTargetWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -1957,7 +2495,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayClimateTargetTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayClimateTargetTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -1965,7 +2530,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateTargetStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -1973,7 +2538,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateTargetSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -1986,7 +2551,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayClimateTargetBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -1997,6 +2562,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -2063,6 +2632,14 @@
                                                      ]
                                        },
                                        {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "LÜFTERSTUFEN-ISTWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "CoolFanVar",
                                            "caption":  "Lüfterstufe Istwert",
@@ -2074,7 +2651,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Messbereich und Farbmittelpunkt"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Skalenbereich des zugehörigen Istwerts (Minimum, Maximum und Farbmittelpunkt)"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2110,7 +2691,11 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Lüfterstufe Istwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Lüfterstufen-Istwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2138,7 +2723,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayFanActualShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Lüfterstufen-Istwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -2153,7 +2738,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayFanActualOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -2173,7 +2758,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionFanActualX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -2181,7 +2766,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionFanActualY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -2189,7 +2774,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanActualWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -2198,7 +2783,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayFanActualTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayFanActualTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2206,7 +2818,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanActualStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -2214,7 +2826,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanActualSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -2227,7 +2839,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanActualBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -2238,6 +2850,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -2304,6 +2920,14 @@
                                                      ]
                                        },
                                        {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "LÜFTERSTUFEN-SOLLWERT – Variable und Anzeigeskala"
+                                       },
+                                       {
                                            "type":  "SelectVariable",
                                            "name":  "CoolFanTargetVar",
                                            "caption":  "Lüfterstufe Sollwert",
@@ -2315,7 +2939,51 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Lüfterstufe Sollwert – Darstellung"
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Lüfterstufen-Sollwertanzeige – Skalenbereich und Farbmittelpunkt"
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeFanTargetMin",
+                                                             "caption":  "Anzeigeskala: Minimum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeFanTargetMax",
+                                                             "caption":  "Anzeigeskala: Maximum",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "RangeFanTargetMid",
+                                                             "caption":  "Farbwechselpunkt innerhalb der Anzeigeskala",
+                                                             "minimum":  -100000,
+                                                             "maximum":  100000,
+                                                             "suffix":  "",
+                                                             "digits":  1
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "ANZEIGE – Lüfterstufen-Sollwert"
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2343,7 +3011,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayFanTargetShape",
-                                                             "caption":  "Form",
+                                                             "caption":  "Anzeigetyp für Lüfterstufen-Sollwert",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "straight",
@@ -2358,7 +3026,7 @@
                                                          {
                                                              "type":  "Select",
                                                              "name":  "DisplayFanTargetOrientation",
-                                                             "caption":  "Ausrichtung",
+                                                             "caption":  "Ausrichtung der Balkenanzeige",
                                                              "options":  [
                                                                              {
                                                                                  "value":  "horizontal",
@@ -2378,7 +3046,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionFanTargetX",
-                                                             "caption":  "Mitte X",
+                                                             "caption":  "Anzeigenmittelpunkt X",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -2386,7 +3054,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "PositionFanTargetY",
-                                                             "caption":  "Mitte Y",
+                                                             "caption":  "Anzeigenmittelpunkt Y",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  0
@@ -2394,7 +3062,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanTargetWidth",
-                                                             "caption":  "Breite / Länge (Skala: Durchmesser)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  100,
                                                              "suffix":  "%",
                                                              "minimum":  10
@@ -2403,7 +3071,34 @@
                                        },
                                        {
                                            "type":  "Label",
-                                           "label":  "Bogenweite: positiv im Uhrzeigersinn, negativ gegen den Uhrzeigersinn. 0° = Norden."
+                                           "label":  "TEXTPOSITION – X/Y verschieben Beschriftung und Messwert gemeinsam innerhalb der Anzeige."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayFanTargetTextOffsetX",
+                                                             "caption":  "Textfeld: X-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         },
+                                                         {
+                                                             "type":  "NumberSpinner",
+                                                             "name":  "DisplayFanTargetTextOffsetY",
+                                                             "caption":  "Textfeld: Y-Versatz zur Anzeigenmitte",
+                                                             "minimum":  -200,
+                                                             "maximum":  200,
+                                                             "suffix":  "px",
+                                                             "digits":  0
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "BOGEN – positiver Winkel im Uhrzeigersinn, negativer Winkel gegen den Uhrzeigersinn; 0° = oben."
                                        },
                                        {
                                            "type":  "RowLayout",
@@ -2411,7 +3106,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanTargetStartAngle",
-                                                             "caption":  "Startwinkel",
+                                                             "caption":  "Startwinkel (0° = oben/Norden)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  0
@@ -2419,7 +3114,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanTargetSweepAngle",
-                                                             "caption":  "Bogenweite",
+                                                             "caption":  "Bogenweite (positiv im Uhrzeigersinn, negativ dagegen)",
                                                              "maximum":  359,
                                                              "suffix":  "°",
                                                              "minimum":  -359
@@ -2432,7 +3127,7 @@
                                                          {
                                                              "type":  "NumberSpinner",
                                                              "name":  "DisplayFanTargetBorderWidth",
-                                                             "caption":  "Balkenrahmenbreite (0 = aus)",
+                                                             "caption":  "Skalendurchmesser bzw. Balkenlänge",
                                                              "maximum":  12,
                                                              "suffix":  "px",
                                                              "minimum":  0
@@ -2443,6 +3138,10 @@
                                                              "caption":  "Balkenrahmenfarbe"
                                                          }
                                                      ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
                                        },
                                        {
                                            "type":  "Label",
@@ -2810,6 +3509,117 @@
                                            "caption":  "Optische Standardeinstellungen wiederherstellen",
                                            "confirm":  "Alle Anzeigeformen, Positionen, Farben und Rahmen auf Standard zurücksetzen?",
                                            "onClick":  "IPS_RequestAction($id, \u0027ResetAppearance\u0027, true);"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "FARBTHEMEN – Hintergrund, Text und Skalenfarben gemeinsam anwenden."
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette0symcon",
+                                                             "caption":  "Symcon-Standard",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027symcon\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette0classic",
+                                                             "caption":  "Altmodisch",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027classic\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette0modern",
+                                                             "caption":  "Modern",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027modern\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette0futuristic",
+                                                             "caption":  "Futuristisch",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027futuristic\u0027);"
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette1neon-green-orange",
+                                                             "caption":  "Neon Grün / Orange",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-green-orange\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette1neon-blue-yellow",
+                                                             "caption":  "Neon Blau / Gelb",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-blue-yellow\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette1neon-pink-cyan",
+                                                             "caption":  "Neon Pink / Cyan",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-pink-cyan\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette1neon-purple-green",
+                                                             "caption":  "Neon Violett / Grün",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-purple-green\u0027);"
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "RowLayout",
+                                           "items":  [
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette2neon-red-cyan",
+                                                             "caption":  "Neon Rot / Cyan",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-red-cyan\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette2neon-orange-purple",
+                                                             "caption":  "Neon Orange / Violett",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-orange-purple\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette2neon-green-pink",
+                                                             "caption":  "Neon Grün / Pink",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-green-pink\u0027);"
+                                                         },
+                                                         {
+                                                             "type":  "Button",
+                                                             "name":  "Palette2neon-blue-orange",
+                                                             "caption":  "Neon Blau / Orange",
+                                                             "onClick":  "IPS_RequestAction($id, \u0027SetPalette\u0027, \u0027neon-blue-orange\u0027);"
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "────────────────────────────────────────────────────────────────────"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "SPENDEN – PayPal an escride16@googlemail.com. Link: https://www.paypal.com/donate/?business=escride16%40googlemail.com\u0026currency_code=EUR"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "MODUL UND DOKUMENTATION: https://github.com/Escride/symcon-heizklima"
+                                       },
+                                       {
+                                           "type":  "Label",
+                                           "label":  "Lizenzdetails stehen in der Datei LICENSE im GitHub-Repository."
                                        }
                                    ]
                      }

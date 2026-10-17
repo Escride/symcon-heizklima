@@ -268,7 +268,10 @@
             midColor + ' ' + mid + '%,' + high + ' 100%)';
         const fill = $('fill-' + key);
         fill.style.background = gradient;
-        const percent = progressFor(element, value);
+        const progressRange = element.target
+            ? { rangeMin: element.controlMin, rangeMax: element.controlMax }
+            : element;
+        const percent = progressFor(progressRange, value);
         fill.style.clipPath = vertical
             ? 'inset(' + (100 - percent) + '% 0 0 0)'
             : 'inset(0 ' + (100 - percent) + '% 0 0)';
@@ -302,6 +305,10 @@
         const label = $('label-' + key);
         label.textContent = showLabel ? element.label : '';
         $('value-' + key).textContent = showValue(value);
+        const text = bar.querySelector('.bar-text');
+        text.style.transform = 'translate(' +
+            (isNum(element.textOffsetX) ? element.textOffsetX : 0) + 'px, ' +
+            (isNum(element.textOffsetY) ? element.textOffsetY : 0) + 'px)';
         applyTextStyle(label, element.styles && element.styles.label);
         applyTextStyle($('value-' + key), element.styles && element.styles.value);
     }
@@ -320,6 +327,9 @@
                 ? '' : (winter ? '❄ Winter' : '☀ Sommer');
             const label = $('value-season');
             label.textContent = seasonText;
+            label.style.transform = 'translate(' +
+                (isNum(element.textOffsetX) ? element.textOffsetX : 0) + 'px, ' +
+                (isNum(element.textOffsetY) ? element.textOffsetY : 0) + 'px)';
             applyTextStyle(label, element.styles && element.styles.label);
             root.style.width = 'auto';
             return;
