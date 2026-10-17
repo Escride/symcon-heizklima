@@ -485,8 +485,10 @@
         },
         { "type": "Button", "name": "ResetAppearance", "caption": "Optische Standardeinstellungen wiederherstellen", "onClick": "IPS_RequestAction($id, 'ResetAppearance', true);" },
         {
-          "type": "Label",
-          "label": "<a href=\"https://www.paypal.com/donate/?hosted_button_id=ZGWSE3GUWTEJG\" target=\"_blank\"><img src=\"https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_SM.gif\" alt=\"Spenden mit dem PayPal-Button\"></a>"
+          "type": "Button",
+          "name": "DonateWithPayPal",
+          "caption": "Mit PayPal spenden",
+          "onClick": "window.open('https://www.paypal.com/donate/?hosted_button_id=ZGWSE3GUWTEJG', '_blank');"
         },
         { "type": "Label", "label": "Modul und Dokumentation: https://github.com/Escride/symcon-heizklima" },
         { "type": "Label", "label": "Lizenzbedingungen stehen in der Datei LICENSE im GitHub-Repository." }

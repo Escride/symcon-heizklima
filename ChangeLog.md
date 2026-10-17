@@ -4,6 +4,7 @@
 
 - Set the module name and vendor to BB Module Klima and BBNBMe.
 - Matched the PHP module class name to the Symcon module name and incremented the library build.
+- Replaced raw PayPal HTML in the form with a native Symcon button opening the hosted donation page.
 
 ## 2026-10-17
 
